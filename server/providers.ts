@@ -3,9 +3,10 @@ import { load } from 'cheerio';
 import { Anchor, CandidateSchema, DiscoveryMode, FilterState, PlaceCandidate, ProviderRun, coords } from '../shared/model';
 import { HttpContext, requestJson, serviceError } from './http';
 import { classifyOsm, overpassQuery } from './engines';
+import type { ExtractedPlace } from './webContentExtractor';
 
-export type ProviderContext=HttpContext&{anchor:Anchor;mode:DiscoveryMode;filters:FilterState;radius:number;round:number};
-export type ProviderResult={candidates:PlaceCandidate[];run:ProviderRun};
+export type ProviderContext=HttpContext&{anchor:Anchor;mode:DiscoveryMode;filters:FilterState;radius:number;round:number;referenceCandidates?:PlaceCandidate[];validationPeers?:ExtractedPlace[];geocodeBudget?:{remaining:number}};
+export type ProviderResult={candidates:PlaceCandidate[];run:ProviderRun;drafts?:ExtractedPlace[]};
 export interface DiscoveryProvider {id:string;role:'geographic'|'public-web';search:(ctx:ProviderContext)=>Promise<ProviderResult>}
 function emptyRun(provider:DiscoveryProvider,ctx:ProviderContext,endpoint:string,query:string):ProviderRun{
   return{provider:provider.id,role:provider.role,status:'success',round:ctx.round,radiusMeters:ctx.radius,rawCount:0,validCount:0,invalidCount:0,categoryExcluded:0,durationMs:0,requests:0,cached:false,error:null,endpoint,query,retrievedAt:null};

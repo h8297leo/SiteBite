@@ -2,6 +2,18 @@
 
 版本 `0.3.0-public-web`。在 P1.5 擴充，保留雙搜尋引擎、雷達、地圖、GPS、導航、篩選、取消及過期回應保護。
 
+## Phase 2.1R 搜尋核心
+
+主要流程為公開文章／論壇探索、具名場所抽取、暫存待驗證候選、多來源位置比對、相關性驗證及距離排序。OSM、Wikidata與百科仍保留作輔助位置或旅遊證據，不再將百科列為通用餐飲搜尋。
+
+GDELT提供免金鑰新聞文章索引（非全網搜尋，需可靠英文地名）；PTT具有公開搜尋頁與討論解析流程，仍受robots及站方存取限制。完整一般網頁搜尋使用已實作的SearXNG接口，須自架或配置明確允許自動查詢的公開HTTPS實例。沒有配置時診斷明確顯示skipped。
+
+Dcard、Reddit、Naver、LIHKG等不使用未授權API；合法取得的搜尋連結／摘要可保留，未授權內容不讀取。只有明確取得內容存取權後才可設定 `FORUM_AUTHORIZED_DOMAINS`，此設定不會繞過robots、登入、CAPTCHA或403。來源狀態可查 `/api/source-capabilities`，每次實際執行情況以搜尋診斷為準。
+
+個別店家／攤販與夜市、美食街分開。餐飲雙軸與景點分類會影響後端查詢；用餐時段只根據明確標籤或原文營業時間，沒有證據不標示。官方座標、既有POI身分、不同來源一致位置、Photon及有界Nominatim地址驗證共同協作；缺少位置的具名提及保留為pending，不用搜尋中心補座標。
+
+不部署Python爬蟲或瀏覽器服務，以保留既有Render Node架構。所有候選僅暫存於搜尋期間、公開回應短期快取；沒有永久店家資料庫。完整能力狀態、限制及後續工作見 [SITEBITE-ROADMAP.md](docs/SITEBITE-ROADMAP.md)。本次測試使用合成資料與mock HTTP，真實地點覆蓋率由使用者在Render驗收。
+
 ## Render 正式環境
 
 使用 **Node Web Service**，Repository `h8297leo/SiteBite`、Branch `main`、Root Directory 留空（Repository 根目錄就是應用程式）。
@@ -64,4 +76,3 @@ SearXNG僅接受自架或明確允許自動查詢的公開HTTPS實例，設定 `
 Repository 保留完整 `src/`、`server/`、`shared/`、必要測試、驗證腳本、套件鎖定檔與說明文件。圖磚故障測試所需的單一歷史回應保存在 `tests/fixtures/`，僅供測試使用。
 
 `node_modules/`、`.env*`（安全範本 `.env.example` 除外）、金鑰檔、快取、建置產物、測試報告、歷史搜尋 JSON、截圖、探索用 probe、生成的來源雜湊清單與 ZIP 備份不納入 Git，仍保留於本機。因此上述歷史報告引用的原始 JSON、圖片、`SOURCE-MANIFEST.json` 及 `../versions/` 並不隨 Repository 發布；Markdown 報告保留其原始測試日期與限制，不代表本次重新驗證了外部搜尋服務。
-

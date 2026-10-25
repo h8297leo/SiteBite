@@ -5,7 +5,7 @@ import https from 'node:https';
 import type { HttpContext, Retrieved } from './http';
 import { retryDelay } from './http';
 
-const agent='SiteBite-Web/0.3 (+http://localhost:3000; public discovery)';
+const agent='SiteBite-Web/0.3 (+https://github.com/h8297leo/SiteBite)';
 type Address={address:string;family:number};
 type WireResponse={status:number;headers:Record<string,string|undefined>;body:string};
 type Dependencies={resolve:(host:string)=>Promise<Address[]>;transport:(url:URL,address:Address,signal:AbortSignal,maxBytes:number)=>Promise<WireResponse>;spacing?:number};
@@ -33,10 +33,13 @@ export function publicUrl(raw:string):URL {
 function apiAllowed(url:URL){
   const h=url.hostname;
   let configured='';try{configured=new URL(process.env.SEARXNG_URL??'').host;}catch{}
+  let nominatim='nominatim.openstreetmap.org';try{if(process.env.NOMINATIM_URL)nominatim=new URL(process.env.NOMINATIM_URL).host;}catch{}
   return /^(?:[a-z0-9-]+\.)?(?:wikipedia|wikivoyage)\.org$/.test(h)&&url.pathname==='/w/api.php'
     ||h==='www.wikidata.org'&&(url.pathname==='/w/api.php'||/^\/wiki\/Special:EntityData\/Q\d+\.json$/.test(url.pathname))
     ||h==='query.wikidata.org'&&url.pathname==='/sparql'
     ||h==='data.cityofnewyork.us'&&url.pathname==='/resource/43nn-pn8j.json'
+    ||h==='api.gdeltproject.org'&&url.pathname==='/api/v2/doc/doc'
+    ||url.host===nominatim&&url.pathname==='/search'
     ||Boolean(configured&&url.host===configured&&url.pathname.endsWith('/search'));
 }
 function cancellable<T>(promise:Promise<T>,signal:AbortSignal):Promise<T>{
@@ -136,7 +139,7 @@ export function createPublicFetcher(dependencies:Dependencies){
     let response=await chain(url,ctx,maxBytes,!options.api,Boolean(options.api));
     if([502,503].includes(response.status)){await new Promise(r=>setTimeout(r,500));ctx.signal.throwIfAborted();response=await chain(url,ctx,maxBytes,!options.api,Boolean(options.api));}
     if(response.status!==200)throw new Error(`公開來源 HTTP ${response.status}`);
-    if(/(?:captcha|verify you are human|access denied|request rejected|sign in to continue)/i.test(response.body.slice(0,16000)))throw new Error('公開來源要求驗證或限制自動存取，未繞過封鎖');
+    if(/(?:captcha|verify you are human|access denied|request rejected|sign in to continue|name=["']?yes["']?[^>]*value=["']?yes|我同意.*十八歲)/i.test(response.body.slice(0,16000)))throw new Error('公開來源要求驗證或限制自動存取，未繞過封鎖');
     const value={data:response.body,url:response.url,retrievedAt:new Date().toISOString(),cached:false};
     if(cache.size>=100)cache.delete(cache.keys().next().value!);cache.set(key,{value,expires:Date.now()+(options.ttl??3600000)});return value;
   };

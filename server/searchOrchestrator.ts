@@ -1,19 +1,25 @@
-import { Anchor, CandidateSchema, DiscoveryMode, FilterState, Place, PlaceCandidate, ProviderRun, SearchResponse, distanceMeters, matchesFilters } from '../shared/model';
+import { Anchor, CandidateSchema, DiscoveryMode, FilterState, Place, PlaceCandidate, ProviderRun, SearchResponse, categoryMatches, distanceMeters, matchesFilters } from '../shared/model';
 import { AttractionDiscoveryEngine, FoodDiscoveryEngine } from './engines';
-import { DiscoveryProvider, OverpassProvider, ProviderContext, WikipediaProvider, WikivoyageProvider } from './providers';
+import { DiscoveryProvider, OverpassProvider, ProviderContext, ProviderResult, WikipediaProvider, WikivoyageProvider } from './providers';
 import { RequestBudget, serviceError } from './http';
 import { TaiwanFoodProvider, TaiwanAttractionProvider } from './taiwanOpenData';
-import { PublicWebKeywordProvider, SearxngPublicSearchProvider, ConfiguredWebArticlesProvider, WikivoyageKeywordProvider } from './publicWeb';
+import { PublicWebKeywordProvider, ConfiguredWebArticlesProvider, WikivoyageKeywordProvider } from './publicWeb';
 import { WikidataPlaceProvider } from './wikidataProvider';
 import { NewYorkFoodProvider } from './localWebSources';
+import { PublicArticleProvider } from './webDiscovery';
+import { ForumDiscoveryProvider, forumSources } from './forumDiscovery';
+import { parseDiscoveryInput, relevanceReason, supportedMeals } from './searchRelevance';
+import { resolvePlaceEntity } from './placeEntityResolver';
+import { venueKind } from './webContentExtractor';
 
 export class CandidatePool{
-  places:Place[]=[];duplicates=0;invalid=0;geography=0;category=0;
-  constructor(readonly anchor:Anchor,readonly mode:DiscoveryMode){}
+  places:Place[]=[];duplicates=0;invalid=0;geography=0;category=0;relevance=0;
+  constructor(readonly anchor:Anchor,readonly mode:DiscoveryMode,readonly filters?:FilterState){}
   add(raw:PlaceCandidate,radius:number){
     const valid=CandidateSchema.safeParse(raw);if(!valid.success){this.invalid++;return 'rejected';}
     const p=valid.data;if(p.mode!==this.mode){this.category++;return 'rejected';}
     const distance=distanceMeters(this.anchor,p);if(distance>radius){this.geography++;return 'rejected';}
+    if(this.filters){if(p.venueKind==='unknown')p.venueKind=venueKind(p.name);p.mealTags=supportedMeals(p);if(relevanceReason(p,this.mode,this.filters)){this.relevance++;return 'rejected';}}
     const normal=(s:string)=>s.normalize('NFKC').toLowerCase().replace(/台/g,'臺').replace(/[\s\p{P}]/gu,'');
     const names=[p.name,p.originalName,...p.aliases].map(normal).filter(Boolean);
     const duplicate=this.places.find(v=>{
@@ -27,9 +33,11 @@ export class CandidatePool{
     this.places.push({...p,distance});return 'added';
   }
 }
-export async function executeSearch(anchor:Anchor,mode:DiscoveryMode,filters:FilterState,signal:AbortSignal,providers:DiscoveryProvider[]=[new OverpassProvider(),new WikipediaProvider(),new WikivoyageProvider(),new TaiwanFoodProvider(),new TaiwanAttractionProvider(),new PublicWebKeywordProvider(),new WikivoyageKeywordProvider(),new WikidataPlaceProvider(),new NewYorkFoodProvider(),new SearxngPublicSearchProvider(),new ConfiguredWebArticlesProvider()]):Promise<SearchResponse>{
+export async function executeSearch(anchor:Anchor,mode:DiscoveryMode,filters:FilterState,signal:AbortSignal,providers:DiscoveryProvider[]=[new PublicArticleProvider('gdelt'),new PublicArticleProvider('searxng'),new ForumDiscoveryProvider(),new ConfiguredWebArticlesProvider(),new OverpassProvider(),new TaiwanFoodProvider(),new TaiwanAttractionProvider(),new NewYorkFoodProvider(),new WikidataPlaceProvider(),new WikivoyageProvider(),new WikipediaProvider(),new PublicWebKeywordProvider(),new WikivoyageKeywordProvider()]):Promise<SearchResponse>{
   const start=Date.now(),engine=mode==='food'?FoodDiscoveryEngine:AttractionDiscoveryEngine;
-  const budget:RequestBudget={used:0,limit:30},pool=new CandidatePool(anchor,mode),runs:ProviderRun[]=[],roundResults:SearchResponse['diagnostics']['roundResults']=[];
+  const intent=parseDiscoveryInput(anchor.originalInput||anchor.name,mode,filters);filters=intent.filters;
+  const budget:RequestBudget={used:0,limit:30},pool=new CandidatePool(anchor,mode,filters),runs:ProviderRun[]=[],roundResults:SearchResponse['diagnostics']['roundResults']=[];
+  const referenceCandidates:PlaceCandidate[]=[],geocodeBudget={remaining:2};
   const webDiscovery={pages:0,parsedPages:0,extracted:0,verified:0,osmDuplicates:0,addedToPool:0,addedToFinal:0,additionalEvidence:0};
   const webIds=new Set<string>();
   const deadline=Date.now()+62000;let radius=engine.initialRadius,stopReason='已達合理地理範圍',round=0;
@@ -37,9 +45,9 @@ export async function executeSearch(anchor:Anchor,mode:DiscoveryMode,filters:Fil
   for(round=1;round<=3;round++){
     signal.throwIfAborted();if(Date.now()>=deadline||budget.used>=budget.limit){stopReason='搜尋時間或公開服務請求預算已用完';break;}
     const remaining=deadline-Date.now();
-    const settled=await Promise.allSettled(providers.map(async provider=>{
-      const meter={requests:0};const providerSignal=AbortSignal.any([signal,AbortSignal.timeout(Math.max(1,Math.min(23000,remaining)))]);
-      const context:ProviderContext={anchor,mode,filters,radius,round,budget,signal:providerSignal,meter};
+    const settled=await Promise.allSettled(providers.map(async(provider):Promise<ProviderResult>=>{
+      const meter={requests:0};const providerSignal=AbortSignal.any([signal,AbortSignal.timeout(Math.max(1,Math.min(20000,remaining-8000)))]);
+      const context:ProviderContext={anchor,mode,filters,radius,round,budget,signal:providerSignal,meter,referenceCandidates,geocodeBudget};
       if(provider.id==='Wikivoyage 公開旅遊文章'&&providerCache.has(provider.id)){
         const prior=runs.find(v=>v.provider===provider.id)!;
         return{candidates:providerCache.get(provider.id)!,run:{...prior,round,radiusMeters:radius,status:'skipped' as const,requests:0,durationMs:0,error:'本次搜尋已讀取附近文章，重用已驗證候選以避免重複請求'}};
@@ -51,18 +59,43 @@ export async function executeSearch(anchor:Anchor,mode:DiscoveryMode,filters:Fil
       return result;
     }));
     let rawCandidates=0;
-    for(let i=0;i<settled.length;i++){
+    const validationPeers=settled.flatMap(r=>r.status==='fulfilled'?r.value.drafts??[]:[]);
+    for(const r of settled)if(r.status==='fulfilled')for(const p of r.value.candidates)if(distanceMeters(anchor,p)<=radius&&!referenceCandidates.some(v=>v.id===p.id))referenceCandidates.push(p);
+    for(const r of settled){
+      if(r.status!=='fulfilled'||!r.value.drafts?.length)continue;
+      const result=r.value,run=result.run,meter={requests:0};
+      const validationSignal=AbortSignal.any([signal,AbortSignal.timeout(Math.max(1,Math.min(8000,deadline-Date.now())))]);
+      const validationStart=Date.now();
+      const verified=await Promise.allSettled(result.drafts!.map(p=>{
+        if(p.mode!==mode||!categoryMatches(p.category,filters.category)){run.categoryExcluded++;return Promise.resolve({status:'rejected' as const,reason:'場所類別不符合目前搜尋條件',candidate:undefined});}
+        return resolvePlaceEntity(p,{anchor,mode,filters,radius,round,budget,signal:validationSignal,meter,referenceCandidates,validationPeers,geocodeBudget},run.retrievedAt??new Date().toISOString(),run.provider);
+      }));
+      run.verificationSamples=[];
+      for(let i=0;i<verified.length;i++){
+        const v=verified[i],draft=result.drafts![i],check=v.status==='fulfilled'?v.value:{status:'pending' as const,reason:'地理驗證逾時或尚未完成'};
+        if(check.candidate){result.candidates.push(check.candidate);run.verifiedPlaces=(run.verifiedPlaces??0)+1;}
+        else if(check.status==='pending')run.pendingPlaces=(run.pendingPlaces??0)+1;else run.rejectedPlaces=(run.rejectedPlaces??0)+1;
+        if(run.verificationSamples.length<20)run.verificationSamples.push({name:draft.name,status:check.status,reason:check.reason??'名稱、位置、類別驗證通過',sourceUrl:draft.sourceUrl});
+      }
+      run.validCount=result.candidates.length;run.requests+=meter.requests;run.durationMs+=Date.now()-validationStart;if(meter.requests)run.cached=false;
+    }
+    // Add the concurrently collected geographic reference pool before web drafts so
+    // a referenced OSM place counts as added evidence, not a new independent venue.
+    const order=settled.map((_,i)=>i).sort((a,b)=>Number(settled[a].status==='fulfilled'&&Boolean((settled[a] as PromiseFulfilledResult<ProviderResult>).value.run.sourceType))-Number(settled[b].status==='fulfilled'&&Boolean((settled[b] as PromiseFulfilledResult<ProviderResult>).value.run.sourceType)));
+    for(const i of order){
       const result=settled[i];
       if(result.status==='fulfilled'){
         const {candidates,run}=result.value;runs.push(run);rawCandidates+=run.status==='skipped'?0:run.rawCount;
         const newWeb=Boolean(run.sourceType)&&run.status!=='skipped';
         if(newWeb){webDiscovery.pages+=run.webPages??0;webDiscovery.parsedPages+=run.parsedPages??0;webDiscovery.extracted+=run.extractedCandidates??0;webDiscovery.verified+=run.verifiedPlaces??candidates.length;}
-        for(const p of candidates){const before=pool.places.reduce((n,p)=>n+p.evidence.length,0);const outcome=pool.add(p,radius);if(newWeb){if(outcome==='added'){webDiscovery.addedToPool++;webIds.add(p.id);}if(outcome==='osm-merged')webDiscovery.osmDuplicates++;if(outcome==='merged'||outcome==='osm-merged')webDiscovery.additionalEvidence+=pool.places.reduce((n,p)=>n+p.evidence.length,0)-before;}}
+        for(const p of candidates){const before=newWeb?pool.places.reduce((n,p)=>n+p.evidence.length,0):0;const outcome=pool.add(p,radius);if(newWeb){if(outcome==='added'){webDiscovery.addedToPool++;webIds.add(p.id);}if(outcome==='osm-merged')webDiscovery.osmDuplicates++;if(outcome==='merged'||outcome==='osm-merged')webDiscovery.additionalEvidence+=pool.places.reduce((n,p)=>n+p.evidence.length,0)-before;}}
       }else runs.push({provider:providers[i].id,role:providers[i].role,status:'failed',round,radiusMeters:radius,rawCount:0,validCount:0,invalidCount:0,categoryExcluded:0,durationMs:0,requests:0,cached:false,error:serviceError(result.reason),endpoint:'',query:'Provider 未完成',retrievedAt:null});
     }
     roundResults.push({round,radiusMeters:radius,rawCandidates,validPool:pool.places.length});
     const matches=pool.places.filter(p=>matchesFilters(p,filters)).length;
-    if(matches>=target){stopReason='已取得至少50個符合條件且去重的有效候選';break;}
+    const webCount=pool.places.filter(p=>p.evidence.some(e=>['json-ld','body-list','forum-post'].includes(e.sourceType??''))).length;
+    const webAvailable=runs.some(r=>['web-discovery','forum-discovery','configured-regional-articles'].includes(r.sourceType??'')&&r.status!=='failed'&&r.status!=='skipped');
+    if(matches>=target&&(!webAvailable||webCount>=10)){stopReason='已收集符合意圖的場所，並完成公開網頁來源參與；依距離取最多50筆';break;}
     if(filters.maxDistance!==null&&radius>=filters.maxDistance){stopReason='已搜尋到使用者指定的距離範圍';break;}
     if(round===3){stopReason='已完成三輪補充搜尋；顯示實際有效數量';break;}
     // Sparse areas expand more than dense areas. A query radius is not a user distance setting.
@@ -80,6 +113,6 @@ export async function executeSearch(anchor:Anchor,mode:DiscoveryMode,filters:Fil
     originalInput:anchor.originalInput,mode,providers:runs,rounds:roundResults.length,roundResults,
     candidates:roundResults.reduce((n,r)=>n+r.rawCandidates,0),categoryExcluded:pool.category+runs.filter(r=>r.status!=='skipped').reduce((n,r)=>n+r.categoryExcluded,0),
     invalidExcluded:pool.invalid+runs.filter(r=>r.status!=='skipped').reduce((n,r)=>n+r.invalidCount,0),geographyExcluded:pool.geography,duplicateExcluded:pool.duplicates,
-    validPool:pool.places.length,finalCount:places.length,durationMs:Date.now()-start,radiusMeters:roundResults.at(-1)?.radiusMeters??0,requestCount:budget.used,requestBudget:budget.limit,stopReason,incompleteReasons,webDiscovery,osmPool:pool.places.filter(p=>p.osmId!==null).length,
+    validPool:pool.places.length,finalCount:places.length,durationMs:Date.now()-start,radiusMeters:roundResults.at(-1)?.radiusMeters??0,requestCount:budget.used,requestBudget:budget.limit,stopReason,incompleteReasons,webDiscovery,osmPool:pool.places.filter(p=>p.osmId!==null).length,intent,relevanceExcluded:pool.relevance,sourceCapabilities:forumSources.map(({name,status,detail})=>({name,status,detail})),
   }};
 }

@@ -1,3 +1,4 @@
+import { PublicArticleProvider } from './webDiscovery';
 import { z } from 'zod';
 import { DiscoveryProvider, ProviderContext, ProviderResult, classifyArticle, parseTravelListings } from './providers';
 import { ProviderRun, coords, distanceMeters } from '../shared/model';
@@ -66,55 +67,30 @@ export class PublicWebKeywordProvider implements DiscoveryProvider{
 }
 
 /** Generic search requires an explicitly authorized instance; no public instance scraping or DDG bypass. */
-export class SearxngPublicSearchProvider implements DiscoveryProvider{
- id='SearXNG 通用公開搜尋';role='public-web' as const;
- async search(ctx:ProviderContext):Promise<ProviderResult>{
-  const run=runFor(ctx,this.id,'generic-web-search'),start=Date.now(),meter={requests:0},context={...ctx,meter},candidates:ProviderResult['candidates']=[];
-  const configured=process.env.SEARXNG_URL;
-  if(!configured||process.env.SEARXNG_AUTOMATION_ALLOWED!=='true'){run.status='skipped';run.cached=false;run.error='未設定自行部署或明確允許自動查詢的 SearXNG；DuckDuckGo 未提供本專案獲授權的通用全文介面';return{candidates,run};}
-  try{
-   const queries=generateDiscoveryQueries(ctx.anchor,ctx.mode,ctx.filters);run.queries=[];
-   for(const q of queries.slice(0,1)){
-    run.queries.push(q.text);
-    const url=new URL('search',configured.endsWith('/')?configured:configured+'/');url.searchParams.set('q',q.text);url.searchParams.set('format','json');url.searchParams.set('language',q.language);run.endpoint=url.origin;run.query=q.text;
-    const response=await fetchPublicText(url.href,context,{api:true,ttl:3600000});const results=z.object({results:z.array(z.object({title:z.string(),url:z.string().url(),content:z.string().optional()}))}).parse(JSON.parse(response.data));run.webPages=results.results.length;run.rawCount=results.results.length;run.retrievedAt=response.retrievedAt;run.cached=response.cached;
-    for(const hit of results.results.slice(0,3)){
-     try{
-      const fetched=await fetchPublicText(hit.url,context,{ttl:3600000});const content=extractWebContent(fetched.data,fetched.url);run.parsedPages!++;run.extractedCandidates!+=content.places.length;run.exclusions!.push(...content.exclusions);
-      for(const place of content.places.slice(0,10)){const verified=await resolvePlaceEntity(place,context,fetched.retrievedAt,this.id);if(verified.candidate){candidates.push(verified.candidate);run.verifiedPlaces!++;}else{run.invalidCount++;run.exclusions!.push(`${place.name}：${verified.reason}`);}}
-     }catch(e){run.exclusions!.push(`${new URL(hit.url).host}：${e instanceof Error?e.message:serviceError(e)}`);ctx.signal.throwIfAborted();}
-    }
-   }
-   run.validCount=candidates.length;if(run.exclusions!.length){run.status='partial';run.error='部分頁面受存取政策限制或候選無法驗證';}return{candidates,run};
-  }catch(e){run.status='failed';run.error=e instanceof Error?e.message:serviceError(e);return{candidates,run};}
-  finally{run.durationMs=Date.now()-start;run.requests=meter.requests;run.exclusions=run.exclusions!.slice(0,30);}
- }
-}
+export class SearxngPublicSearchProvider extends PublicArticleProvider{constructor(){super('searxng');}}
 
 /** Opt-in regional public article registry; policies and robots are checked per destination. */
 export class ConfiguredWebArticlesProvider implements DiscoveryProvider{
  id='地方公開文章擷取';role='public-web' as const;
  async search(ctx:ProviderContext):Promise<ProviderResult>{
-  const run=runFor(ctx,this.id,'configured-regional-articles'),start=Date.now(),meter={requests:0},context={...ctx,meter},candidates:ProviderResult['candidates']=[];
-  if(!process.env.WEB_SOURCE_URLS){run.status='skipped';run.cached=false;run.error='未設定具有合法存取依據的地方文章來源 WEB_SOURCE_URLS';return{candidates,run};}
+  const start=Date.now(),meter={requests:0},context={...ctx,meter},run=runFor(ctx,this.id,'configured-regional-articles');
+  const drafts:ExtractedPlace[]=[];
+  if(!process.env.WEB_SOURCE_URLS){run.status='skipped';run.cached=false;run.error='未設定具有合法存取依據的地方文章來源WEB_SOURCE_URLS';return{candidates:[],drafts,run};}
   try{
    const sources=z.array(z.object({url:z.string().url(),country:z.string(),mode:z.enum(['food','attraction']),automationAllowed:z.literal(true),officialLocationAuthority:z.boolean().default(false)})).max(30).parse(JSON.parse(process.env.WEB_SOURCE_URLS));
-   const selected=sources.filter(s=>s.country.toUpperCase()===ctx.anchor.country.toUpperCase()&&s.mode===ctx.mode).slice(0,2);
-   if(!selected.length){run.status='skipped';run.error='已設定來源沒有符合目前國家與探索模式的文章';return{candidates,run};}
+   const selected=sources.filter(p=>p.country.toUpperCase()===ctx.anchor.country.toUpperCase()&&p.mode===ctx.mode).slice(0,2);
+   if(!selected.length){run.status='skipped';run.error='來源清單未涵蓋目前國家／模式';}
    for(const source of selected){
     run.queries!.push(source.url);run.endpoint=source.url;run.webPages!++;run.rawCount++;
-    try{
-     const response=await fetchPublicText(source.url,context,{ttl:3600000});run.cached=run.cached&&response.cached;run.retrievedAt=response.retrievedAt;
-     const content=extractWebContent(response.data,response.url);run.parsedPages!++;run.extractedCandidates!+=content.places.length;run.exclusions!.push(...content.exclusions);
-     for(const place of content.places.slice(0,10)){const verified=await resolvePlaceEntity({...place,officialLocationAuthority:source.officialLocationAuthority},context,response.retrievedAt,this.id);if(verified.candidate){candidates.push(verified.candidate);run.verifiedPlaces!++;}else{run.invalidCount++;run.exclusions!.push(`${place.name}：${verified.reason}`);}}
-    }catch(e){run.exclusions!.push(`${source.url}：${e instanceof Error?e.message:serviceError(e)}`);ctx.signal.throwIfAborted();}
+    try{const response=await fetchPublicText(source.url,context,{ttl:900000});const content=extractWebContent(response.data,response.url);run.parsedPages!++;run.retrievedAt=response.retrievedAt;
+     drafts.push(...content.places.slice(0,12).map(p=>({...p,officialLocationAuthority:source.officialLocationAuthority})));run.exclusions!.push(...content.exclusions);
+    }catch(e){run.exclusions!.push(e instanceof Error?e.message:'文章無法存取');if(ctx.signal.aborted)break;}
    }
-   run.validCount=candidates.length;if(run.exclusions!.length){run.status=run.parsedPages?'partial':'failed';run.error='部分文章受存取政策限制或場所無法驗證';}return{candidates,run};
-  }catch(e){run.status='failed';run.error=e instanceof Error?e.message:serviceError(e);return{candidates,run};}
-  finally{run.durationMs=Date.now()-start;run.requests=meter.requests;run.query=run.queries!.join('；');run.exclusions=run.exclusions!.slice(0,30);}
+   run.extractedCandidates=drafts.length;if(run.exclusions!.length){run.status=run.parsedPages?'partial':'failed';run.error='部分文章無法讀取或解析';}return{candidates:[],drafts,run};
+  }catch(e){run.status='failed';run.error=e instanceof Error?e.message:'文章來源配置錯誤';return{candidates:[],drafts,run};}
+  finally{run.requests=meter.requests;run.cached=run.status!=='skipped'&&meter.requests===0&&Boolean(run.retrievedAt);run.durationMs=Date.now()-start;run.query=run.queries!.join('；');}
  }
 }
-
 /** Fulltext travel article discovery followed by actual typed listing extraction. */
 export class WikivoyageKeywordProvider implements DiscoveryProvider{
  id='Wikivoyage 關鍵字文章發現';role='public-web' as const;

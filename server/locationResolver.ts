@@ -62,7 +62,7 @@ async function wikiCenters(query:string,ctx:HttpContext):Promise<Anchor[]>{
     const c=p.coordinates?.find(c=>/^(city|country|adm1st|adm2nd|state|landmark|mountain|waterbody|building|isle|river|edu|event|airport)$/.test(c.type??''))??p.coordinates?.[0];if(!c)continue;
     const similar=Array.from(normalized).filter(v=>parsed.data.title.includes(v)).length/Math.max(1,parsed.data.title.length);
     if(similar<0.5)continue;
-    list.push({id:`wiki-center:${p.fullurl}`,name:parsed.data.title,displayName:`${parsed.data.title}${c.country?` · ${c.country}`:''}（維基百科地名座標）`,country:c.country??'',city:/city|adm/.test(c.type??'')?parsed.data.title:'',region:c.region??'',latitude:c.lat,longitude:c.lon,confidence:'source-match',source:p.fullurl,category:'搜尋中心',geoType:`wiki:${c.type??'coordinate'}`,originalInput:query});
+    list.push({id:`wiki-center:${p.fullurl}`,name:parsed.data.title,englishName:parsed.data.langlinks?.[0]?.['*']??(base.includes('en.')?p.title:undefined),displayName:`${parsed.data.title}${c.country?` · ${c.country}`:''}（維基百科地名座標）`,country:c.country??'',city:/city|adm/.test(c.type??'')?parsed.data.title:'',region:c.region??'',latitude:c.lat,longitude:c.lon,confidence:'source-match',source:p.fullurl,category:'搜尋中心',geoType:`wiki:${c.type??'coordinate'}`,originalInput:query});
   }return list;
 }
 export async function coordinateAnchor(latitude:number,longitude:number,ctx:HttpContext):Promise<Anchor>{
