@@ -35,9 +35,7 @@ export function overpassQuery(mode:DiscoveryMode,latitude:number,longitude:numbe
  if(specific[filters.category])tags=specific[filters.category];
  else if(mode==='food'&&filters.meal==='下午茶')tags={amenity:['cafe','ice_cream'],shop:['bakery','pastry','confectionery','ice_cream']};
  const around=`(around:${radius},${latitude},${longitude})`;
- const mealKeys:Record<string,string>={'早餐':'breakfast','早午餐':'brunch','午餐':'lunch','晚餐':'dinner'};
- const evidence=filters.meal?['["opening_hours"]',...(mealKeys[filters.meal]?[`["${mealKeys[filters.meal]}"="yes"]`]:[])]:[''];
- const clauses=Object.entries(tags).flatMap(([key,values])=>evidence.map(proof=>`nwr["${key}"~"^(${values.join('|')})$"]${proof}${around};`)).join('');
+ const clauses=Object.entries(tags).map(([key,values])=>`nwr["${key}"~"^(${values.join('|' )})$"]${around};`).join('');
  return`[out:json][timeout:8][maxsize:8388608];(${clauses});out center;`;
 }
 export interface DiscoveryEngine {mode:DiscoveryMode;label:string;initialRadius:number;maximumRadius:number;query:(lat:number,lon:number,radius:number,filters:FilterState)=>string}

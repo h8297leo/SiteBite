@@ -30,6 +30,10 @@ export function extractWebContent(html:string,url:string):ExtractedContent{
  const publishedAt=date($('meta[property="article:published_time"]').attr('content')??$('time[datetime]').first().attr('datetime'));
  $('script:not([type="application/ld+json"]),style,nav,footer,iframe,.article-metaline,.article-metaline-right').remove();
  const places:ExtractedPlace[]=[],exclusions:string[]=[];let traversed=0;
+ const documents:unknown[]=[],nodes=new Map<string,Record<string,unknown>>();
+ const index=(v:unknown,depth=0)=>{if(depth>12||nodes.size>1000||!v||typeof v!=='object')return;if(Array.isArray(v)){for(const row of v)index(row,depth+1);return;}const obj=v as Record<string,unknown>;if(typeof obj['@id']==='string'&&Object.keys(obj).length>1)nodes.set(obj['@id'],obj);for(const child of Object.values(obj))index(child,depth+1);};
+ $('script[type="application/ld+json"]').each((_,el)=>{try{const doc=JSON.parse($(el).text());documents.push(doc);index(doc);}catch{exclusions.push('無法解析 JSON-LD');}});
+ const resolve=(v:unknown):Record<string,unknown>=>v&&typeof v==='object'&&!Array.isArray(v)?{...(nodes.get(String((v as Record<string,unknown>)['@id']))??{}),...v}:{};
  const visit=(value:unknown,depth=0)=>{
   if(depth>12||traversed++>1000)return;
   if(Array.isArray(value)){for(const v of value)visit(v,depth+1);return;}
@@ -38,27 +42,28 @@ export function extractWebContent(html:string,url:string):ExtractedContent{
   if(classification){
    const name=typeof obj.name==='string'?obj.name.trim():'';
    if(name&&!/\b(top \d+|best restaurants|things to do)\b|十大|必吃推薦/i.test(name)){
-    const addr=obj.address;const address=typeof addr==='string'?addr:addr&&typeof addr==='object'?['addressCountry','addressRegion','addressLocality','streetAddress','postalCode'].map(k=>(addr as Record<string,unknown>)[k]).filter(v=>typeof v==='string').join(' '):null;
-    const geo=obj.geo&&typeof obj.geo==='object'?obj.geo as Record<string,unknown>:{};const lat=Number(geo.latitude),lon=Number(geo.longitude);
+    const location=resolve(obj.location),addr=obj.address??location.address;const address=typeof addr==='string'?addr:addr&&typeof addr==='object'?['addressCountry','addressRegion','addressLocality','streetAddress','postalCode'].map(k=>resolve(addr)[k]).filter(v=>typeof v==='string').join(' '):null;
+    const geo=resolve(obj.geo??location.geo);const lat=Number(geo.latitude),lon=Number(geo.longitude);
     const located=geo.latitude!==undefined&&geo.latitude!==null&&geo.latitude!==''&&geo.longitude!==undefined&&geo.longitude!==null&&geo.longitude!==''&&Number.isFinite(lat)&&Number.isFinite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180;
     const specs=Array.isArray(obj.openingHoursSpecification)?obj.openingHoursSpecification:[obj.openingHoursSpecification];
-    const hours=typeof obj.openingHours==='string'?obj.openingHours:Array.isArray(obj.openingHours)?obj.openingHours.filter(v=>typeof v==='string').join('; '):specs.flatMap(v=>v&&typeof v==='object'&&'opens'in v&&'closes'in v?[`${v.opens}-${v.closes}`]:[]).join('; ');
+    const days:Record<string,string>={Monday:'Mo',Tuesday:'Tu',Wednesday:'We',Thursday:'Th',Friday:'Fr',Saturday:'Sa',Sunday:'Su'};
+    const hours=typeof obj.openingHours==='string'?obj.openingHours:Array.isArray(obj.openingHours)?obj.openingHours.filter(v=>typeof v==='string').join('; '):specs.flatMap(raw=>{const v=resolve(raw);if(!('opens'in v&&'closes'in v))return[];if(v.validFrom||v.validThrough)return[JSON.stringify(v)];const selected=(Array.isArray(v.dayOfWeek)?v.dayOfWeek:[v.dayOfWeek]).filter(Boolean).map(d=>days[String(d).split('/').pop()!]??String(d));return[`${selected.length?selected.join(',')+' ':''}${v.opens}-${v.closes}`];}).join('; ');
     places.push({name,aliases:typeof obj.alternateName==='string'?[obj.alternateName]:Array.isArray(obj.alternateName)?obj.alternateName.filter((v):v is string=>typeof v==='string'):[],...classification,address:address||null,latitude:located?lat:null,longitude:located?lon:null,sourceUrl:url,sourceTitle:title,siteName,publishedAt:date(obj.dateModified??obj.datePublished)??publishedAt,officialUrl:safeUrl(obj.url,url),categoryEvidence:`Schema.org ${types.join(', ')}`,locationEvidence:located?'頁面 JSON-LD GeoCoordinates':address?'頁面 JSON-LD PostalAddress':'未取得位置證據',extraction:'json-ld',venueKind:venueKind(name,types.join(' ')),openingHours:hours||null});
    }else exclusions.push('結構化名稱為文章集合或缺少場所名稱');
   }
   for(const [key,v]of Object.entries(obj))if(key!=='geo'&&key!=='address')visit(v,depth+1);
  };
- $('script[type="application/ld+json"]').each((_,el)=>{try{visit(JSON.parse($(el).text()));}catch{exclusions.push('無法解析 JSON-LD');}});
+ for(const doc of documents)visit(doc);
  // Explicit body listing elements require a venue name, type and address together.
  $('[itemtype]').each((_,el)=>{const node=$(el),type=node.attr('itemtype')??'',classification=classifyStructuredType([type]);if(!classification)return;const name=node.find('[itemprop="name"]').first().text().trim(),address=node.find('[itemprop="address"]').first().text().trim();if(!name||!address)return;
   if(places.some(p=>p.name===name&&p.address===address))return;
   places.push({name,aliases:[],address,latitude:null,longitude:null,...classification,sourceUrl:url,sourceTitle:title,siteName,publishedAt,officialUrl:null,categoryEvidence:`正文 microdata ${type}`,locationEvidence:'正文標記地址，尚需獨立地理解析',extraction:'body-list'});
  });
  // Conservative non-structured list: named heading plus labelled street address and explicit venue type.
- $('article h2,article h3,main h2,main h3,.entry-content h2,.entry-content h3,#main-content h2,#main-content h3').slice(0,60).each((_,el)=>{
+ $('article h2,article h3,main h2,main h3,.entry-content h2,.entry-content h3,#main-content h2,#main-content h3,article li > strong:first-child,main li > strong:first-child').slice(0,60).each((_,el)=>{
   const heading=$(el),name=heading.text().trim().replace(/^\d+[.、)\s]+/,'');
   if(!name||name.length>80||/十大|\d+間|推薦清單|附近美食|地址|營業資訊|交通|聯絡|top \d+|best restaurants|things to do/i.test(name))return;
-  const section=heading.nextUntil('h2,h3').slice(0,5).text().replace(/\s+/g,' ');
+  const section=(heading.is('strong')?heading.parent().text():heading.nextUntil('h2,h3').slice(0,5).text()).replace(/\s+/g,' ').slice(0,1800);
   const address=section.match(/(?:地址|住所|所在地|Address|Adresse|주소)\s*[:：]\s*([^\n]{8,180}?)(?=電話|營業|營業時間|Tel|Hours|Opening|$)/i)?.[1]?.trim();
   if(!address||!/(?:路|街|號|丁目|番地|Street|St\b|Avenue|Ave\b|Road|Rd\b|Rue|Boulevard|로|길)/i.test(address))return;
   const classification=classifyPlaceText(name)??classifyPlaceText(section);

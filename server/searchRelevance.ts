@@ -1,3 +1,4 @@
+import { collectMealEvidence, mealAssessment } from '../shared/meals';
 import { DiscoveryMode, FilterState, PlaceCandidate, categoryOptions, categoryMatches, mealOptions } from '../shared/model';
 
 export function parseDiscoveryInput(raw:string,mode:DiscoveryMode,filters:FilterState){
@@ -19,26 +20,14 @@ export function parseDiscoveryInput(raw:string,mode:DiscoveryMode,filters:Filter
  return{locationQuery,category,meal,terms,filters:{...filters,category,meal}};
 }
 
-export function supportedMeals(p:Pick<PlaceCandidate,'osmTags'|'openingHours'>){
- const found=new Set<string>();const tags=p.osmTags;
- for(const [key,name]of [['breakfast','早餐'],['brunch','早午餐'],['lunch','午餐'],['dinner','晚餐']])if(tags[key]==='yes')found.add(name);
- const hours=p.openingHours??'';
- if(/24\/7|00:00-24:00/.test(hours))for(const m of mealOptions)found.add(m);
- const intervals=[...hours.matchAll(/(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})/g)].flatMap(m=>{
-  const a=Number(m[1])*60+Number(m[2]),b=Number(m[3])*60+Number(m[4]);return b<a?[[a,1440],[0,b]]:[[a,b]];
- });
- const windows:Record<string,[number,number]>={'早餐':[360,600],'早午餐':[540,780],'午餐':[660,840],'下午茶':[840,1020],'晚餐':[1020,1260],'宵夜':[1320,1440]};
- for(const [meal,[a,b]]of Object.entries(windows))if(intervals.some(([s,e])=>Math.min(e,b)-Math.max(s,a)>=30))found.add(meal);
- if(intervals.some(([s,e])=>Math.min(e,240)-Math.max(s,0)>=30))found.add('宵夜');
- return [...found];
-}
+export function supportedMeals(p:Pick<PlaceCandidate,'osmTags'|'openingHours'>){return collectMealEvidence(p).filter(e=>e.status==='confirmed').map(e=>e.meal).filter((m,i,a)=>a.indexOf(m)===i);}
 
 export function relevanceReason(p:PlaceCandidate,mode:DiscoveryMode,filters:FilterState):string|null{
  if(p.mode!==mode)return '美食／景點模式不符';
  if(['administrative','road'].includes(p.venueKind))return '行政區或普通道路不是推薦場所';
  if(mode==='food'&&['market','food-court','shopping-area'].includes(p.venueKind))return '場所集合不是個別店家或攤販';
  if(!categoryMatches(p.category,filters.category))return '店家／景點分類不符';
- if(filters.meal&&!p.mealTags.includes(filters.meal))return '缺少此用餐時段的營業證據';
+ if(filters.meal&&mealAssessment(p,filters.meal).status==='excluded')return '來源證據確認不符合此用餐時段';
  if(filters.category==='秘境探索'&&!p.evidence.some(e=>e.categoryEvidence?.includes('秘境')))return '缺少秘境證據';
  return null;
 }

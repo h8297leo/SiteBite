@@ -4,6 +4,7 @@ import type { ProviderContext, ProviderResult, DiscoveryProvider } from './provi
 import { ProviderRun } from '../shared/model';
 import { generateDiscoveryQueries } from './queryGenerator';
 import { extractWebContent } from './webContentExtractor';
+import { sourceFailure } from './http';
 
 export type WebHit={title:string;url:string;snippet?:string};
 // Apply the same content-access policy to general search hits and forum search hits.
@@ -25,9 +26,13 @@ export async function searxSearch(query:string,language:string,ctx:ProviderConte
 export async function collectWebPages(hits:WebHit[],ctx:ProviderContext,run:ProviderRun,mayRead:(url:string)=>boolean=mayReadSearchHit):Promise<NonNullable<ProviderResult['drafts']>>{
  const unique=[...new Map(hits.map(p=>{const u=new URL(p.url);u.hash='';return[u.href,p];})).values()];
  run.webPages=unique.length;run.rawCount=unique.length;run.links=unique.slice(0,20).map(p=>({url:p.url,title:p.title,snippet:p.snippet,level:p.snippet?'search-snippet':'link-only'}));
- const drafts:NonNullable<ProviderResult['drafts']>=[];
- for(const hit of unique.slice(0,3)){
+ const drafts:NonNullable<ProviderResult['drafts']>=[],pages=ctx.pageBudget??{remaining:8};let stopped=false;
+ const official=(url:string)=>/\.(?:gov|gov\.[a-z]{2}|go\.[a-z]{2})$/i.test(new URL(url).hostname);
+ const ranked=[...unique].sort((a,b)=>Number(official(b.url))-Number(official(a.url)));
+ for(const hit of ranked){
   if(!mayRead(hit.url)){run.exclusions!.push(`${new URL(hit.url).hostname}：僅保留搜尋連結；內容擷取尚未獲准`);continue;}
+  if(pages.remaining<=0||ctx.budget.used>=ctx.budget.limit||ctx.signal.aborted||Date.now()>=(ctx.deadline??Infinity)-8000){stopped=true;run.exclusions!.push('正文解析受篇數、剩餘時間或 HTTP 預算限制；未讀取的網頁不算解析成功');break;}
+  pages.remaining--;
   try{
    const page=await fetchPublicText(hit.url,ctx,{ttl:900000});const content=extractWebContent(page.data,page.url);
    if(!content.places.length&&content.text.trim().length<80)throw new Error('頁面未提供足夠的可讀公開正文；可能為JavaScript殼頁');
@@ -38,7 +43,7 @@ export async function collectWebPages(hits:WebHit[],ctx:ProviderContext,run:Prov
   }catch(e){run.exclusions!.push(`${new URL(hit.url).hostname}：${e instanceof Error?e.message:'無法讀取內容'}`);if(ctx.signal.aborted)break;}
  }
  run.extractedCandidates=drafts.length;
- if(unique.length&&!run.parsedPages){run.status='partial';run.error='已找到網頁，但內容受限制或未能讀取；未以摘要冒充全文';}
+ if(stopped||unique.length&&!run.parsedPages){run.status='partial';run.error=stopped?'正文解析預算已用完，保留已完成抽取':'已找到網頁，但內容受限制或未能讀取；未以摘要冒充全文';}
  return drafts;
 }
 
@@ -70,7 +75,7 @@ export class PublicArticleProvider implements DiscoveryProvider{
     if(!hits.length&&run.exclusions!.length)throw new Error(run.exclusions!.join('；'));
    }
    drafts=await collectWebPages(hits,context,run);return{candidates:[],drafts,run};
-  }catch(e){run.status=run.parsedPages?'partial':'failed';run.error=e instanceof Error?e.message:'公開網頁搜尋失敗';return{candidates:[],drafts,run};}
+  }catch(e){run.status=run.parsedPages?'partial':'failed';run.failureCode=sourceFailure(e).code;run.error=sourceFailure(e).message;return{candidates:[],drafts,run};}
   finally{run.requests=meter.requests;run.cached=run.status!=='skipped'&&meter.requests===0&&Boolean(run.retrievedAt);run.durationMs=Date.now()-start;run.exclusions=run.exclusions!.slice(0,20);}
  }
 }

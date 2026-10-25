@@ -68,7 +68,7 @@
 - 新聞索引覆蓋有限。完整通用搜尋仍需獲准的 SearXNG 等服務；沒有商業金鑰要求，但不保證免配置即可搜尋全球全部網站。
 - 正文抽取採保守規則；缺少結構、具名欄位或位置證據的自然語言討論可能無法抽出。不使用 LLM 猜店家。
 - 跨語言分店、結構化資料引用圖及複雜地址待深化；不同網域一致是佐證，不是絕對獨立出版者保證。
-- 每次搜尋只給少量候選額外地理解析額度，避免大量呼叫公共 Nominatim；其他候選明示待驗證。官方、既有地理參照及一致來源驗證不受這個額度限制。
+- 每次搜尋給予可配置、有上限的候選額外地理解析額度，避免大量呼叫公共 Nominatim；其他候選明示待驗證。官方、既有地理參照及一致來源驗證不受這個額度限制。
 - 餐期由明示 breakfast 等標籤或可解析營業時間支持，不表示菜單供應或目前營業；不能解析就不補猜。
 - 夜景／秘境只接受來源明示描述；秘境描述不等於低人氣或私房指數證據。
 
@@ -140,3 +140,86 @@
 ## 最低驗證與交付
 
 只做 TypeScript、npm run build、npm run start、/api/health 及修改核心的必要單元測試；不大量呼叫公開來源、不建立測試資料庫、不跑大型跨國或瀏覽器 E2E。實際功能由使用者在 Render 測試；沒有部署證據不宣稱 Render 已成功更新。
+
+## Phase 2.1R-P0：搜尋核心修復（本次實作）
+
+本節合併於原規劃，針對餐期未知、Overpass 故障及驗證額度修正；取代前文「缺少餐期證據便排除」及固定兩個額外驗證機會的舊行為。沒有覆蓋既有後續規劃。
+
+| 工作 | 實際修改及狀態 | 可驗收標準 |
+| --- | --- | --- |
+| P0-1 餐飲查詢 | 已實作。Overpass 只依地理範圍及餐飲類別查詢，不要求 opening_hours 或 breakfast/lunch/dinner 標籤。 | Mock OSM 有／無營業時間皆取得；錯誤類別不混入。 |
+| P0-2 餐期三態 | 已實作 shared/meals.ts。confirmed、unknown、excluded；未知或衝突保留，只有明確不符才排除，仍依距離排序。 | 確認、未知、不符、跨午夜、複雜時段未知、來源衝突及候選合併保留證據。 |
+| P0-3 Overpass 故障 | 已實作 POST form body、獨立端點嘗試、可辨識錯誤、Retry-After／冷卻、下一公開端點備援。POST 不保證能解決外部故障。 | Mock 主端點成功、備援成功、雙端點失敗、403／429、超時、JSON／schema、語法、預算及取消。 |
+| P0-4 地理驗證 | 已實作驗證前按名稱／地址去重、官方及座標／完整地址／多網域優先、小批次驗證、同候選不重複呼叫。額度可配置。 | 多場所文章、同店多來源、不同分店、可靠座標、不完整地址、座標衝突及額度不足均有明確狀態。 |
+| P0-5 協調器 | 已實作探索／驗證請求預留、穩定文章結果重用、故障冷卻跳過、優先待驗證佇列、無新增資料提前停止。 | Mock 單來源／全來源故障、文章無位置、慢文章與 50 POI 並行、時間耗盡、取消及無新增結果。 |
+| P0-6 診斷 | 已實作來源端點錯誤分類、實際加入池、驗證前去重、逐候選待驗證／排除原因與餐期不符。 | 六個文章場所變成零個結果時，可看到每個名稱及具體原因，而非只顯示格式錯誤。 |
+
+### 餐期證據與限制
+
+每個場所保留原始 mealTags、OSM 標籤、營業時間；mealEvidence 另存餐期狀態、原文、來源 URL、證據類型與驗證狀態。合併來源時不覆蓋彼此時段；正反證據衝突時為 unknown，顯示「餐期來源資訊衝突，尚待確認」。未知顯示「用餐時段未確認」。移除百科、旅遊及餐飲目錄中依場所類別自動產生午餐／晚餐／下午茶的舊假設。
+
+只保守解析簡單週時段、明示 meal=yes/no 及來源原始餐期資訊；複雜節假日、季節、日期或文字規則保持未知。這不是完整 OSM opening_hours evaluator，也不是菜單供應或目前營業保證。
+
+### 搜尋內資源
+
+- HTTP 總額度維持 30，探索來源最多使用前 22 次，剩餘資源留給地理驗證；快取命中不消耗 HTTP 次數。
+- GEOCODE_CANDIDATE_LIMIT 預設 6，上限 12；是不同候選的額外驗證機會，不是無限制 API 請求。0 可關閉額外地理解析。
+- 公共 Nominatim 每次搜尋最多兩次備援地址查詢，仍使用既有全站單程序限速、識別 User-Agent、短期快取及目的地檢查。不做批次城市地理編碼。多實例部署前必須有跨實例限速或使用合規自架服務。
+- WEB_PAGE_LIMIT 預設 8，上限 16，作為各公開來源共用的正文額度；會依允許讀取、官方網域優先、剩餘時間／請求資源提前停止，不再固定前三篇。
+- SEARCH_TIME_BUDGET_MS 預設及上限 62000，最低 1000；保留 Provider timeout、取消、三輪上限及無增益停止。這些選項不包含金鑰或固定場所資料。
+- 備援是其他合規公開來源，不使用代理輪換、改身分或繞過 403／驗證／robots。
+
+## Phase 2.1R-P1：公開網頁搜尋升級（技術準備及部分實作）
+
+### 正式環境來源能力盤點
+
+本次沒有執行第三方真實搜尋或讀取 Render 私密設定。以下區分程式能力與正式環境可用性；部署後應以 Render 搜尋診斷確認當時狀態，不把 Adapter 或 Mock 通過當成網站已可存取。
+
+| 來源層級 | 狀態 | 對品質的限制 |
+| --- | --- | --- |
+| 通用網頁：SearXNG | 已實作，但需要獲准 HTTPS 實例、JSON 輸出及明確啟用。Render 是否配置未確認。 | 未配置就沒有通用網頁搜尋；不得用百科補上後宣稱已完成。 |
+| 新聞：GDELT | 已實作免金鑰輔助索引，未做本次真實搜尋驗收。 | 近期新聞及可靠英文地名限制，不代表全球美食網站覆蓋。 |
+| 論壇：PTT | 公開 HTML 流程已實作；Food／Tai-travel 依模式，先中心關鍵字，空結果才以城市＋分類補充，最多兩個查詢。 | robots、封鎖、年齡／登入限制、看板覆蓋與關鍵字品質仍需實際驗收，不繞過。 |
+| Dcard／Reddit／Naver／LIHKG 等 | 只有合法搜尋連結發現基礎，全文需授權，未完成內容整合。 | 未配置獲准搜尋服務時連結發現也不執行；加上授權網域設定不等於取得授權。 |
+| 地方公開文章 | 共通安全擷取及抽取已實作；需配置合法文章／來源。 | 未逐國逐站完成整合，不能宣稱全球地方餐飲來源已接入。 |
+| 地理：OSM／Overpass | 既有真實 POI／位置輔助保留；使用者已回報端點連線與超時故障，修正後仍待驗收。 | 外部故障可能仍使結果不足；不能保證 POST 或備援必然成功。 |
+| 百科／旅遊：Wikipedia／Wikidata／Wikivoyage | 保留分類、座標、別名及部分具名列表。 | 不是完整美食搜尋，不以增加查詢次數充當通用搜尋完成。 |
+| 官方餐飲／觀光開放資料 | 保留既有地區 Adapter，依實際 HTTP 與格式呈現成功／失敗。 | 端點拒絕或資料涵蓋不足仍存在，不建立永久店家庫補足。 |
+
+### 已實作與待完成
+
+已實作：跨來源共用正文額度與安全擷取、Schema.org @graph 的 address／geo 引用、location 內的結構化位置、營業日資訊保留、HTML 清單的具名店家＋地址抽取、多場所段落、共通論壇介面。沒有增加 Python、瀏覽器爬蟲或大型 DOM 依賴。
+
+部分完成：正文抽取仍為 Cheerio 保守規則，未引入完整 Mozilla Readability／Trafilatura，不能保證自由文字討論的抽取率。SearXNG 服務部署、授權論壇全文及各國網站專屬解析尚未完成；本次不另建 Render 服務。
+
+可驗收標準：Mock 搜尋結果超過三篇時，依資源處理更多允許的正文；來源受限時如實保留連結；同篇文章可抽取多場所；結構化位置與地址經地理驗證後才入選；未配置來源明示未配置。真正公開搜尋覆蓋率與 PTT 即時可用性由使用者在 Render 驗收。
+
+## 成熟開源技術對照（機制 → 對應程式 → 驗證）
+
+以下是機制借鑑與既有 HTTP 介面使用，不表示安裝了對應函式庫；本次沒有新增套件。
+
+| 參考及官方文件 | 實際機制 | SiteBite 對應位置 | 狀態／限制及驗證 |
+| --- | --- | --- | --- |
+| [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) | POST 將 QL 置於 data form body；類別與 around 查詢 | engines.ts、providers.ts | 已實作；Mock 確認 POST、無餐期門檻、類別隔離；外部端點品質待驗收。 |
+| [OSM opening_hours](https://wiki.openstreetmap.org/wiki/Key:opening_hours) | 保留原始時段、週選擇器及跨午夜區間；缺失不是否定 | shared/meals.ts、searchRelevance.ts、shared/model.ts | 部分實作保守解析；未支援完整節假日／日期語法，保持未知。 |
+| [got retry](https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md)／[Cockatiel](https://github.com/connor4312/cockatiel) | 可重試故障分類、Retry-After、冷卻後再探測、獨立 fallback、取消與時限 | http.ts、providers.ts、searchOrchestrator.ts | 已實作相應有限控制；未安裝套件、不是完整自適應熔斷庫；Mock 覆蓋 DNS、HTTP、格式、取消及備援。 |
+| [Photon](https://github.com/komoot/photon) | 地點查詢、中心偏向、國家／名稱／地址／候選匹配 | locationResolver.ts、placeEntityResolver.ts | 保留並改善候選前處理；相同品牌多分店不憑中心距離直接認定。 |
+| [Nominatim](https://github.com/osm-search/Nominatim)／[使用政策](https://operations.osmfoundation.org/policies/nominatim/) | 名稱／門牌／道路比對、國家約束、限速、識別、快取、可換端點 | placeEntityResolver.ts、secureWeb.ts | 已實作少量備援；公共服務每次最多兩次，仍需遵守全站政策；Mock 驗證，未做真實批量查詢。 |
+| [OpenRefine clustering](https://openrefine.org/docs/technical-reference/clustering-in-depth) | 正規化後分組，分組不等於實體已驗證 | placeEntityResolver.ts、searchOrchestrator.ts | 部分借鑑 NFKC／標點／台臺正規化及名稱＋地址群組；不是 OpenRefine 完整 fingerprint 演算法或服務。 |
+| [Pelias](https://github.com/pelias/pelias) | 多來源地理候選與結構化地址匹配 | placeEntityResolver.ts 後續規劃 | 尚未部署／整合 Pelias；現有多來源佐證不宣稱使用其引擎。 |
+| [SearXNG API](https://docs.searxng.org/dev/search_api.html) | q／language／format=json、明確啟用與格式錯誤隔離 | queryGenerator.ts、webDiscovery.ts | HTTP Adapter 已實作，需額外配置合法服務；JSON 可能被禁用，未配置不可標成功。 |
+| [Scrapy RetryMiddleware](https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#module-scrapy.downloadermiddlewares.retry) | 將下載故障控制與正文處理分離，限制重試與請求資源 | http.ts、secureWeb.ts、webDiscovery.ts、forumDiscovery.ts | 部分機制借鑑，使用既有 TypeScript；沒有安裝 Scrapy、沒有大型爬蟲排程。 |
+| [Mozilla Readability](https://github.com/mozilla/readability) | 正文／metadata 分離、可讀性門檻、輸出不等於可信場所 | webContentExtractor.ts、webDiscovery.ts | 部分借鑑，使用 Cheerio；未安裝 Readability，未處理完整語意正文評分，外部 HTML 不直接渲染。 |
+| [Schema.org Restaurant](https://schema.org/Restaurant) | 個別 Restaurant、PostalAddress、GeoCoordinates、openingHoursSpecification 與圖譜引用 | webContentExtractor.ts、placeEntityResolver.ts | 已實作保守抽取及驗證；Mock 多場所、地址／座標 @id 引用，複雜 graph 仍有限制。 |
+| [Trafilatura](https://github.com/adbar/trafilatura)／[Crawl4AI](https://github.com/unclecode/crawl4ai) | 正文抽取與下載／瀏覽器執行職責分離 | P1 正文後續評估 | 尚未引入，不宣稱整合；Render Free 資源與額外服務尚需評估。 |
+
+## 後續階段的技術依據與驗收補充
+
+| 階段 | 保留的工作 | 技術依據 | 可驗收標準 |
+| --- | --- | --- | --- |
+| Phase 2.2 分類深化 | 雙軸餐飲、景點、全球詞彙與營業日／餐期證據 | OSM 標籤、opening_hours、Schema.org FoodEstablishment／OpeningHoursSpecification | 類別影響後端查詢；未知可辨識，營業日／時段不憑空推定，兩模式不混合。 |
+| Phase 2.3 全球論壇與社群 | PTT、Dcard、Reddit、日本、韓國、香港及旅遊討論 | SearXNG API、Scrapy 下載隔離原理及各站官方授權文件 | 每站提供合法能力狀態；連結／摘要／全文分開；可讀內容抽出具名場所並完成驗證，不宣稱未授權全文。 |
+| Phase 2.4 搜尋品質與效能 | 分店、別名、地址、正文精度、相關性、資源與可靠性 | Photon／Nominatim、OpenRefine clustering、Pelias 多來源候選、Readability 正文概念 | 同名不同分店不誤併；跨來源證據保留；無位置不入選；資源有界並有逐候選診斷。 |
+| Phase 3 評分／熱門／私房 | 核心穩定後才處理評分、熱度及推薦 | Schema.org Review／AggregateRating 的來源與原始尺度；依各平台官方接口及條款 | 無可靠原始來源不得產生分數；來源、時間、尺度、店家身份可追溯；不得以來源數直接冒充熱門。 |
+
+以上是規劃及驗收標準，不代表後續功能已實作。本次不新增評分、人氣或私房功能。

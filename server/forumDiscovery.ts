@@ -31,12 +31,15 @@ export class ForumDiscoveryProvider implements DiscoveryProvider{
    const queries=generateDiscoveryQueries(ctx.anchor,ctx.mode,ctx.filters);let hits:WebHit[]=[];
    // Public PTT HTML is requested on demand, not an undocumented mobile API.
    if(ctx.anchor.country==='TW'&&process.env.PTT_PUBLIC_SEARCH_ENABLED!=='false'){
-    const board=ctx.mode==='food'?'Food':'Tai-travel';const u=new URL(`https://www.ptt.cc/bbs/${board}/search`);u.searchParams.set('q',ctx.anchor.name);
-    run.endpoint=u.origin;run.query=u.href;run.queries!.push(u.href);
+    const board=ctx.mode==='food'?'Food':'Tai-travel';
+    const keywords=[ctx.anchor.name,...(ctx.anchor.city&&ctx.anchor.city!==ctx.anchor.name?[ctx.anchor.city+' '+(ctx.filters.category==='全部'?'':ctx.filters.category)]:[])].slice(0,2);
+    for(const keyword of keywords){const u=new URL(`https://www.ptt.cc/bbs/${board}/search`);u.searchParams.set('q',keyword);
+    run.endpoint=u.origin;run.queries!.push(u.href);run.query=run.queries!.join('；');
     try{const r=await fetchPublicText(u.href,context,{ttl:900000});const $=load(r.data);run.retrievedAt=r.retrievedAt;
      if(!$('div.r-list-container,div.bbs-screen').length)throw new Error('PTT未返回可辨識的公開搜尋頁；不將登入或錯誤頁當作空結果');
-     hits=$('.title a').toArray().flatMap(el=>{const href=$(el).attr('href');if(!href||!new RegExp(`^/bbs/${board}/M\\.`).test(href))return[];return[{url:new URL(href,u).href,title:$(el).text().trim()}];}).slice(0,8);
-    }catch(e){run.exclusions!.push(e instanceof Error?e.message:'PTT公開搜尋失敗');}
+     hits.push(...$('.title a').toArray().flatMap(el=>{const href=$(el).attr('href');if(!href||!new RegExp(`^/bbs/${board}/M\\.`).test(href))return[];return[{url:new URL(href,u).href,title:$(el).text().trim()}];}).slice(0,8));
+     if(hits.length)break;
+    }catch(e){run.exclusions!.push(e instanceof Error?e.message:'PTT公開搜尋失敗');break;}}
    }
    if(process.env.SEARXNG_URL&&process.env.SEARXNG_AUTOMATION_ALLOWED==='true'){
     const sources=forumSources.filter(s=>s.countries.includes(ctx.anchor.country)||s.countries.includes('global')).slice(0,4);

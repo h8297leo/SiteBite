@@ -28,7 +28,7 @@ export class NewYorkFoodProvider implements DiscoveryProvider {
     const cuisine=p.cuisine_description??'',category=/coffee|tea/i.test(cuisine)?'咖啡廳':/bakery|dessert|ice cream/i.test(cuisine)?'甜點':'餐廳';
     const sourceUrl=`https://data.cityofnewyork.us/resource/43nn-pn8j.json?camis=${encodeURIComponent(p.camis)}`;
     const address=[p.building,p.street,p.boro,'New York',p.zipcode].filter(Boolean).join(' ');
-    const normalized=CandidateSchema.safeParse({id:`nyc:${p.camis}`,name:p.dba,originalName:p.dba,mode:'food',category,latitude:p.latitude,longitude:p.longitude,address,sourceUrl,retrievedAt:fetched.retrievedAt,osmType:null,osmId:null,osmTags:{},mealTags:['咖啡廳','甜點'].includes(category)?['下午茶']:['午餐','晚餐'],featureTags:[],openingHours:null,website:null,
+    const normalized=CandidateSchema.safeParse({id:`nyc:${p.camis}`,name:p.dba,originalName:p.dba,mode:'food',category,latitude:p.latitude,longitude:p.longitude,address,sourceUrl,retrievedAt:fetched.retrievedAt,osmType:null,osmId:null,osmTags:{},mealTags:[],featureTags:[],openingHours:null,website:null,
      evidence:[{provider:this.id,sourceId:p.camis,url:sourceUrl,retrievedAt:fetched.retrievedAt,kind:'public-article',description:'官方餐廳登記名稱、地址、分店識別碼及座標；不採用衛生檢查分數作推薦評分',sourceType:'government-open-data',providerName:this.id,sourceUrl,sourceTitle:'DOHMH New York City Restaurant Inspection Results',evidenceType:'official-location-record',extractedPlaceName:p.dba,locationEvidence:`${address} · ${p.latitude},${p.longitude}`,categoryEvidence:`官方餐廳資料集；餐飲類型 ${cuisine}`}],rating:null,reviewCount:null,popularityScore:null,localGemScore:null});
     if(normalized.success)candidates.push(normalized.data);else run.invalidCount++;
    }

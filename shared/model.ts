@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { MealEvidenceSchema, mealAssessment } from './meals';
 
 export const coords = { latitude: z.number().finite().min(-90).max(90), longitude: z.number().finite().min(-180).max(180) };
 const PublicLink=z.string().url().refine(value=>['https:','http:'].includes(new URL(value).protocol),'來源連結只能使用 HTTP 或 HTTPS');
@@ -29,6 +30,7 @@ export const CandidateSchema = z.object({
   address:z.string().default('未取得公開地址'), sourceUrl:PublicLink, retrievedAt:z.string(),
   osmType:z.enum(['node','way','relation']).nullable(), osmId:z.number().nullable(), osmTags:z.record(z.string()),
   mealTags:z.array(z.string()), featureTags:z.array(z.string()), openingHours:z.string().nullable(), website:PublicLink.nullable(),
+  mealEvidence:z.array(MealEvidenceSchema).optional(),
   evidence:z.array(EvidenceSchema).min(1), rating:z.number().nullable(), reviewCount:z.number().nullable(),
   popularityScore:z.number().nullable(), localGemScore:z.number().nullable(),
   ratingEvidence:z.array(RatingEvidenceSchema).default([]), socialEvidence:z.array(SocialEvidenceSchema).default([]),
@@ -55,6 +57,8 @@ export const ProviderRunSchema=z.object({
   durationMs:z.number(),requests:z.number(),cached:z.boolean(),error:z.string().nullable(),endpoint:z.string(),query:z.string(),retrievedAt:z.string().nullable(),
   webPages:z.number().optional(),parsedPages:z.number().optional(),extractedCandidates:z.number().optional(),verifiedPlaces:z.number().optional(),queries:z.array(z.string()).optional(),exclusions:z.array(z.string()).optional(),sourceType:z.string().optional(),
   pendingPlaces:z.number().optional(),rejectedPlaces:z.number().optional(),relevanceExcluded:z.number().optional(),
+  addedToPool:z.number().optional(),failureCode:z.string().optional(),retryAt:z.number().optional(),
+  endpointAttempts:z.array(z.object({endpoint:z.string(),status:z.string(),code:z.string().optional(),reason:z.string().optional()})).optional(),
   links:z.array(z.object({url:z.string().url(),title:z.string(),level:z.enum(['link-only','search-snippet']),snippet:z.string().optional()})).optional(),
   verificationSamples:z.array(z.object({name:z.string(),status:z.enum(['verified','pending','rejected']),reason:z.string(),sourceUrl:z.string().url()})).optional(),
 });
@@ -70,6 +74,8 @@ export const ResponseSchema=z.object({
     osmPool:z.number().optional(),
     intent:z.object({locationQuery:z.string(),category:z.string(),meal:z.string().nullable(),terms:z.array(z.string())}).optional(),
     relevanceExcluded:z.number().optional(),
+    pendingValidation:z.number().optional(),validationDuplicates:z.number().optional(),mealExcluded:z.number().optional(),
+    poolDecisions:z.array(z.object({name:z.string(),reason:z.string()})).optional(),
     sourceCapabilities:z.array(z.object({name:z.string(),status:z.string(),detail:z.string()})).optional(),
   }),
 });
@@ -80,7 +86,7 @@ export function distanceMeters(a:{latitude:number;longitude:number},b:{latitude:
   return 6371000*2*Math.atan2(Math.sqrt(h),Math.sqrt(Math.max(0,1-h)));
 }
 export function matchesFilters(p:PlaceCandidate&{distance:number},f:FilterState){
-  return categoryMatches(p.category,f.category)&&(!f.meal||p.mealTags.includes(f.meal))&&(!f.feature||p.featureTags.includes(f.feature))&&
+  return categoryMatches(p.category,f.category)&&(!f.meal||mealAssessment(p,f.meal).status!=='excluded')&&(!f.feature||p.featureTags.includes(f.feature))&&
     (f.maxDistance===null||p.distance<=f.maxDistance)&&(f.minRating===null||(p.rating!==null&&p.rating>=f.minRating));
 }
 export function filterPlaces(places:Place[],filters:FilterState){return places.filter(p=>matchesFilters(p,filters)).sort((a,b)=>filters.sort==='name'?a.name.localeCompare(b.name,'zh-TW'):a.distance-b.distance);}

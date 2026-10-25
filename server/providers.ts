@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import { load } from 'cheerio';
 import { Anchor, CandidateSchema, DiscoveryMode, FilterState, PlaceCandidate, ProviderRun, coords } from '../shared/model';
-import { HttpContext, requestJson, serviceError } from './http';
+import { HttpContext, requestJson, serviceError, sourceFailure, sourceCircuit, SourceError } from './http';
 import { classifyOsm, overpassQuery } from './engines';
 import type { ExtractedPlace } from './webContentExtractor';
 
-export type ProviderContext=HttpContext&{anchor:Anchor;mode:DiscoveryMode;filters:FilterState;radius:number;round:number;referenceCandidates?:PlaceCandidate[];validationPeers?:ExtractedPlace[];geocodeBudget?:{remaining:number}};
+export type ProviderContext=HttpContext&{anchor:Anchor;mode:DiscoveryMode;filters:FilterState;radius:number;round:number;referenceCandidates?:PlaceCandidate[];validationPeers?:ExtractedPlace[];geocodeBudget?:{remaining:number;attempted?:Set<string>;nominatimRemaining?:number};pageBudget?:{remaining:number}};
 export type ProviderResult={candidates:PlaceCandidate[];run:ProviderRun;drafts?:ExtractedPlace[]};
 export interface DiscoveryProvider {id:string;role:'geographic'|'public-web';search:(ctx:ProviderContext)=>Promise<ProviderResult>}
 function emptyRun(provider:DiscoveryProvider,ctx:ProviderContext,endpoint:string,query:string):ProviderRun{
@@ -29,30 +29,30 @@ export function normalizeOsm(raw:unknown,mode:DiscoveryMode,at:string):{candidat
     rating:null,reviewCount:null,popularityScore:null,localGemScore:null,ratingEvidence:[],socialEvidence:[],
   });return candidate.success?{candidate:candidate.data}:{reason:'invalid'};
 }
-const brokenUntil=new Map<string,number>();
 export class OverpassProvider implements DiscoveryProvider{
   id='Overpass OSM';role='geographic' as const;
   async search(ctx:ProviderContext):Promise<ProviderResult>{
-    const start=Date.now(),used=ctx.budget.used;
+    const start=Date.now(),meter=ctx.meter??{requests:0},context={...ctx,meter};
     const query=overpassQuery(ctx.mode,ctx.anchor.latitude,ctx.anchor.longitude,ctx.radius,ctx.filters);
     const endpoints=process.env.OVERPASS_URL?[process.env.OVERPASS_URL]:['https://overpass-api.de/api/interpreter','https://overpass.private.coffee/api/interpreter'];
-    const run=emptyRun(this,ctx,endpoints.join(' → '),query),candidates:PlaceCandidate[]=[];const errors:string[]=[];
+    const run=emptyRun(this,ctx,endpoints.map(e=>new URL(e).origin+new URL(e).pathname).join(' → '),query),candidates:PlaceCandidate[]=[];const errors:string[]=[];run.endpointAttempts=[];
     try{
       for(const endpoint of endpoints){
-        if((brokenUntil.get(endpoint)??0)>Date.now()){errors.push(`${new URL(endpoint).host}：最近失敗，冷卻中`);continue;}
+        const circuit=sourceCircuit(endpoint),safeEndpoint=new URL(endpoint).origin+new URL(endpoint).pathname;
+        if(circuit.retryAt>Date.now()){errors.push(`${new URL(endpoint).host}：${circuit.code} 冷卻中`);run.endpointAttempts.push({endpoint:safeEndpoint,status:'skipped',code:circuit.code,reason:'尊重冷卻，未再次請求'});continue;}
         try{
-          const u=new URL(endpoint);u.searchParams.set('data',query);
-          // Reserve time for the alternate endpoint inside the 23-second provider budget.
-          const r=await requestJson(u.href,{...ctx,signal:AbortSignal.any([ctx.signal,AbortSignal.timeout(endpoints.length>1?10000:18000)])},v=>z.object({elements:z.array(z.unknown()),remark:z.string().optional()}).parse(v));
-          run.endpoint=endpoint;run.cached=r.cached;run.retrievedAt=r.retrievedAt;run.rawCount=r.data.elements.length;
+          const timeout=Math.max(1,Math.min(endpoints.length>1?8500:15000,(ctx.deadline??Date.now()+20000)-Date.now()));
+          const r=await requestJson(endpoint,{...context,signal:AbortSignal.any([ctx.signal,AbortSignal.timeout(timeout)])},v=>z.object({elements:z.array(z.unknown()),remark:z.string().optional()}).parse(v),{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({data:query}).toString()});
+          run.endpoint=safeEndpoint;run.cached=r.cached;run.retrievedAt=r.retrievedAt;run.rawCount+=r.data.elements.length;
           for(const raw of r.data.elements){const result=normalizeOsm(raw,ctx.mode,r.retrievedAt);if(result.candidate)candidates.push(result.candidate);else if(result.reason==='category')run.categoryExcluded++;else run.invalidCount++;}
-          if(r.data.remark){run.status='partial';errors.push(r.data.remark);if(!candidates.length){brokenUntil.set(endpoint,Date.now()+60000);continue;}}else if(errors.length)run.status='partial';
+          if(r.data.remark){const code=/parse error|syntax error/i.test(r.data.remark)?'query-syntax':/timed out|timeout/i.test(r.data.remark)?'query-timeout':'query-runtime';throw new SourceError(code,code==='query-syntax'?'Overpass 查詢語法錯誤':code==='query-timeout'?'Overpass 查詢執行逾時':'Overpass 查詢未完整執行');}
+          run.endpointAttempts.push({endpoint:safeEndpoint,status:'success'});if(errors.length)run.status='partial';
           run.validCount=candidates.length;run.error=errors.length?errors.join('；'):null;return{candidates,run};
-        }catch(e){errors.push(`${new URL(endpoint).host}：${serviceError(e)}`);if(!ctx.signal.aborted&&!serviceError(e).includes('預算'))brokenUntil.set(endpoint,Date.now()+60000);ctx.signal.throwIfAborted();}
+        }catch(e){const failure=sourceFailure(e),code=failure.code==='http-400'?'query-syntax':failure.code;run.failureCode=code;run.endpointAttempts.push({endpoint:safeEndpoint,status:'failed',code,reason:failure.message});errors.push(`${new URL(endpoint).host}：${code}／${failure.message}`);ctx.signal.throwIfAborted();if(['budget','query-syntax'].includes(code))break;}
       }
-      run.status='failed';run.error=errors.join('；');return{candidates,run};
-    }catch(e){run.status='failed';run.error=[...errors,serviceError(e)].join('；');return{candidates,run};}
-    finally{run.durationMs=Date.now()-start;run.requests=ctx.budget.used-used;}
+      run.status=candidates.length?'partial':'failed';run.validCount=candidates.length;run.error=errors.join('；');return{candidates,run};
+    }catch(e){run.status=candidates.length?'partial':'failed';run.failureCode=sourceFailure(e).code;run.error=[...errors,serviceError(e)].join('；');return{candidates,run};}
+    finally{run.durationMs=Date.now()-start;run.requests=meter.requests;if(run.status==='failed'){const times=endpoints.map(e=>sourceCircuit(e).retryAt).filter(t=>t>Date.now());if(times.length===endpoints.length)run.retryAt=Math.min(...times);}}
   }
 }
 function wikiApi(host:string,params:Record<string,string>){const u=new URL('/w/api.php',host);u.searchParams.set('format','json');u.searchParams.set('maxlag','5');for(const[k,v]of Object.entries(params))u.searchParams.set(k,v);return u.href;}
@@ -62,8 +62,8 @@ export function classifyArticle(categories:string[],mode:DiscoveryMode):{categor
   const text=categories.join(' ').toLowerCase();
   if(/restaurant chains|companies|disambiguation|districts of|neighbou?rhoods|streets in|roads in|cities in|villages in|communes|railway stations|industrial parks|science parks|business parks|office parks/.test(text))return null;
   if(mode==='food'){
-    if(/coffeehouses|cafés|cafes|tea houses/.test(text))return{category:'咖啡廳',mealTags:['下午茶'],featureTags:[]};
-    if(/restaurants in|restaurants established/.test(text))return{category:'餐廳',mealTags:['午餐','晚餐'],featureTags:[]};return null;
+    if(/coffeehouses|cafés|cafes|tea houses/.test(text))return{category:'咖啡廳',mealTags:[],featureTags:[]};
+    if(/restaurants in|restaurants established/.test(text))return{category:'餐廳',mealTags:[],featureTags:[]};return null;
   }
   if(/museums|museum buildings/.test(text))return{category:'博物館',mealTags:[],featureTags:['文化']};
   if(/art galleries|exhibition/.test(text))return{category:'展覽',mealTags:[],featureTags:['文化']};
@@ -116,7 +116,7 @@ export function parseTravelListings(html:string,pageUrl:string,mode:DiscoveryMod
     const description=card.find('.listing-content').text().trim();
     if(/permanently closed|no longer open|永久關閉|已歇業|폐업|définitivement fermé/i.test(description)){categoryExcluded++;return;}
     let category:string|null=null,mealTags:string[]=[],featureTags:string[]=[];
-    if(mode==='food'&&/eat|drink/.test(section)&&!(/sleep|buy|get in|get around/.test(section))){category=/night market|夜市/i.test(name)?'小吃':/coffee|café|cafe|tea house/i.test(`${name} ${description}`)?'咖啡廳':/bakery|dessert|ice cream/i.test(`${name} ${description}`)?'甜點':/drink/.test(section)?'酒吧':'餐廳';mealTags=['咖啡廳','甜點'].includes(category)?['下午茶']:['午餐','晚餐'];}
+    if(mode==='food'&&/eat|drink/.test(section)&&!(/sleep|buy|get in|get around/.test(section))){category=/night market|夜市/i.test(name)?'小吃':/coffee|café|cafe|tea house/i.test(`${name} ${description}`)?'咖啡廳':/bakery|dessert|ice cream/i.test(`${name} ${description}`)?'甜點':/drink/.test(section)?'酒吧':'餐廳';mealTags=[];}
     if(mode==='attraction'&&/see|do/.test(section)&&!(/buy|sleep|get in|get around/.test(section))){const text=`${name} ${description}`;category=/museum/i.test(text)?'博物館':/park|garden/i.test(text)?'公園':/temple|shrine|church|theatre|theater/i.test(text)?'文化':/mountain|lake|beach|waterfall/i.test(text)?'自然':/zoo|aquarium|theme park/i.test(text)?'親子':/gallery|exhibition/i.test(text)?'展覽':'地標';featureTags=['博物館','文化','展覽'].includes(category)?['文化']:['公園','自然'].includes(category)?['自然','戶外']:category==='親子'?['親子']:['觀光'];}
     if(!category){categoryExcluded++;return;}
     const lat=Number(card.find('.latitude').first().text()),lon=Number(card.find('.longitude').first().text());
