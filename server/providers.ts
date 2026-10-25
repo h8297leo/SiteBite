@@ -45,9 +45,9 @@ export class OverpassProvider implements DiscoveryProvider{
           const r=await requestJson(u.href,{...ctx,signal:AbortSignal.any([ctx.signal,AbortSignal.timeout(endpoints.length>1?10000:18000)])},v=>z.object({elements:z.array(z.unknown()),remark:z.string().optional()}).parse(v));
           run.endpoint=endpoint;run.cached=r.cached;run.retrievedAt=r.retrievedAt;run.rawCount=r.data.elements.length;
           for(const raw of r.data.elements){const result=normalizeOsm(raw,ctx.mode,r.retrievedAt);if(result.candidate)candidates.push(result.candidate);else if(result.reason==='category')run.categoryExcluded++;else run.invalidCount++;}
-          if(r.data.remark){run.status='partial';errors.push(r.data.remark);}else if(errors.length)run.status='partial';
+          if(r.data.remark){run.status='partial';errors.push(r.data.remark);if(!candidates.length){brokenUntil.set(endpoint,Date.now()+60000);continue;}}else if(errors.length)run.status='partial';
           run.validCount=candidates.length;run.error=errors.length?errors.join('；'):null;return{candidates,run};
-        }catch(e){errors.push(`${new URL(endpoint).host}：${serviceError(e)}`);brokenUntil.set(endpoint,Date.now()+60000);ctx.signal.throwIfAborted();}
+        }catch(e){errors.push(`${new URL(endpoint).host}：${serviceError(e)}`);if(!ctx.signal.aborted&&!serviceError(e).includes('預算'))brokenUntil.set(endpoint,Date.now()+60000);ctx.signal.throwIfAborted();}
       }
       run.status='failed';run.error=errors.join('；');return{candidates,run};
     }catch(e){run.status='failed';run.error=[...errors,serviceError(e)].join('；');return{candidates,run};}

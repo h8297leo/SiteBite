@@ -3,6 +3,7 @@ import { isIP } from 'node:net';
 import http from 'node:http';
 import https from 'node:https';
 import type { HttpContext, Retrieved } from './http';
+import { retryDelay } from './http';
 
 const agent='SiteBite-Web/0.3 (+http://localhost:3000; public discovery)';
 type Address={address:string;family:number};
@@ -99,7 +100,7 @@ export function createPublicFetcher(dependencies:Dependencies){
       if(ctx.budget.used>=ctx.budget.limit)throw new Error('已達公開服務請求預算');ctx.budget.used++;if(ctx.meter)ctx.meter.requests++;
       const result=await cancellable(dependencies.transport(url,addresses[0],signal,maxBytes),signal);
       if(Buffer.byteLength(result.body)>maxBytes)throw new Error('公開來源回應超過大小限制');
-      if([403,429].includes(result.status))cooldown.set(url.host,Date.now()+60000);
+      if([403,429].includes(result.status))cooldown.set(url.host,Date.now()+retryDelay(result.headers['retry-after'],60000));
       return result;
     }finally{nextAllowed.set(url.host,Date.now()+Math.max(dependencies.spacing??1100,crawlDelays.get(url.host)??0));setTimeout(release,dependencies.spacing??1100);if(lanes.get(url.host)===lane)lane.finally(()=>{if(lanes.get(url.host)===lane)lanes.delete(url.host);});}
   }

@@ -7,6 +7,10 @@ export type Retrieved<T> = { data:T; retrievedAt:string; cached:boolean; url:str
 const directory=new URL('../.cache/core-v2/',import.meta.url);
 const lanes=new Map<string,Promise<void>>();
 const cooldown=new Map<string,number>();
+export function retryDelay(value:string|null|undefined,minimum:number){
+  const delay=value?.trim()?(Number.isFinite(Number(value))?Number(value)*1000:Date.parse(value)-Date.now()):0;
+  return Number.isFinite(delay)?Math.max(minimum,delay):minimum;
+}
 function abortable<T>(promise:Promise<T>,signal:AbortSignal):Promise<T>{
   signal.throwIfAborted();return new Promise((resolve,reject)=>{
     const abort=()=>reject(signal.reason);signal.addEventListener('abort',abort,{once:true});
@@ -34,17 +38,17 @@ export async function requestJson<T>(url:string,ctx:HttpContext,parse:(raw:unkno
     if((cooldown.get(host)??0)>Date.now())throw new Error('來源 HTTP 429/406 冷卻中');
     if(ctx.budget.used>=ctx.budget.limit)throw new Error('已達公開服務請求預算');ctx.budget.used++;if(ctx.meter)ctx.meter.requests++;
     const response=await fetch(url,{...options,headers:{'User-Agent':'SiteBite-Web/0.2 (+http://localhost:3000; local preview)',Accept:'application/json',...options.headers},signal:ctx.signal});
-    if(!response.ok){if([429,406].includes(response.status))cooldown.set(host,Date.now()+30000);throw new Error(`來源 HTTP ${response.status}`);}
+    if(!response.ok){if([429,406].includes(response.status))cooldown.set(host,Date.now()+retryDelay(response.headers.get('retry-after'),30000));throw new Error(`來源 HTTP ${response.status}`);}
     // Bound legacy geographic/public API responses too, including custom ZIP decoders.
     const maximum=10000000;if(Number(response.headers.get('content-length'))>maximum)throw new Error('來源回應超過10 MB大小限制');
     const chunks:Uint8Array[]=[];let bytes=0;const reader=response.body?.getReader();
     if(reader){while(true){ctx.signal.throwIfAborted();const part=await reader.read();if(part.done)break;bytes+=part.value.byteLength;if(bytes>maximum){await reader.cancel();throw new Error('來源回應超過10 MB大小限制');}chunks.push(part.value);}}
     const bounded=new Response(new Uint8Array(Buffer.concat(chunks)),{status:response.status,headers:response.headers});
     const raw:unknown=await decode(bounded);const data=parse(raw);const retrievedAt=new Date().toISOString();
-    await mkdir(directory,{recursive:true});await writeFile(file,JSON.stringify({expires:Date.now()+ttl,retrievedAt,data:raw}));
+    try{await mkdir(directory,{recursive:true});await writeFile(file,JSON.stringify({expires:Date.now()+ttl,retrievedAt,data:raw}));}catch{/* Optional cache failure must not discard a validated public response. */}
     return{data,retrievedAt,cached:false,url};
   }finally{
     // A cancelled waiter still releases its place only after prior work completes.
-    await new Promise(r=>setTimeout(r,1100));release();if(lanes.get(host)===lane)lanes.delete(host);
+    await new Promise(r=>setTimeout(r,1100));release();void lane.then(()=>{if(lanes.get(host)===lane)lanes.delete(host);});
   }
 }

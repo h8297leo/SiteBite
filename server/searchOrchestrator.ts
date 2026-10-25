@@ -23,7 +23,7 @@ export class CandidatePool{
       if(p.mode==='food'&&p.id.startsWith('nyc:')&&v.id.startsWith('nyc:')&&p.id!==v.id)return false;
       return (p.entityId&&p.entityId===v.entityId&&separation<Math.max(200,tolerance))||(separation<tolerance&&[v.name,v.originalName,...v.aliases].some(n=>names.includes(normal(n))));
     });
-    if(duplicate){this.duplicates++;const key=(url:string)=>{const u=new URL(url);u.hash='';return u.href;};for(const e of p.evidence)if(!duplicate.evidence.some(v=>key(v.url)===key(e.url)))duplicate.evidence.push(e);duplicate.aliases=[...new Set([...duplicate.aliases,p.name,p.originalName,...p.aliases])];return duplicate.osmId!==null?'osm-merged':'merged';}
+    if(duplicate){this.duplicates++;const key=(url:string)=>{const u=new URL(url);u.hash='';return u.href;};for(const e of p.evidence)if(!duplicate.evidence.some(v=>key(v.url)===key(e.url)))duplicate.evidence.push(e);duplicate.aliases=[...new Set([...duplicate.aliases,p.name,p.originalName,...p.aliases])];duplicate.mealTags=[...new Set([...duplicate.mealTags,...p.mealTags])];duplicate.featureTags=[...new Set([...duplicate.featureTags,...p.featureTags])];return duplicate.osmId!==null?'osm-merged':'merged';}
     this.places.push({...p,distance});return 'added';
   }
 }
@@ -47,7 +47,7 @@ export async function executeSearch(anchor:Anchor,mode:DiscoveryMode,filters:Fil
       const result=await provider.search(context);if(!provider.id.startsWith('觀光署')&&!result.run.sourceType)result.run.requests=meter.requests;
       // Even a provider returning malformed data is isolated inside this settled job.
       result.candidates=result.candidates.flatMap(p=>{const parsed=CandidateSchema.safeParse(p);if(parsed.success)return[parsed.data];result.run.invalidCount++;return[];});
-      if(provider.id==='Wikivoyage 公開旅遊文章')providerCache.set(provider.id,result.candidates);
+      if(provider.id==='Wikivoyage 公開旅遊文章'&&result.run.status==='success')providerCache.set(provider.id,result.candidates);
       return result;
     }));
     let rawCandidates=0;
@@ -64,7 +64,7 @@ export async function executeSearch(anchor:Anchor,mode:DiscoveryMode,filters:Fil
     const matches=pool.places.filter(p=>matchesFilters(p,filters)).length;
     if(matches>=target){stopReason='已取得至少50個符合條件且去重的有效候選';break;}
     if(filters.maxDistance!==null&&radius>=filters.maxDistance){stopReason='已搜尋到使用者指定的距離範圍';break;}
-    if(round===3){stopReason='已完成三輪補充搜尋；顯示實際有效数量';break;}
+    if(round===3){stopReason='已完成三輪補充搜尋；顯示實際有效數量';break;}
     // Sparse areas expand more than dense areas. A query radius is not a user distance setting.
     const factor=matches<10?3:2;radius=Math.min(engine.maximumRadius,Math.round(radius*factor));
     if(filters.maxDistance!==null)radius=Math.min(radius,Math.max(engine.initialRadius,filters.maxDistance));
@@ -74,7 +74,9 @@ export async function executeSearch(anchor:Anchor,mode:DiscoveryMode,filters:Fil
   const failures=runs.filter(r=>r.status==='failed'||r.status==='partial');
   const incompleteReasons=[...new Set(runs.filter(r=>r.status==='failed'||r.status==='partial'||(r.status==='skipped'&&r.error?.includes('安全性封鎖'))).map(r=>`${r.provider} 第${r.round}輪：${r.error??'來源未完成'}`))];
   if(Date.now()>=deadline||budget.used>=budget.limit)incompleteReasons.push('已達本次搜尋時間或請求預算，保留已完成來源的有效結果');
-  return{anchor,mode,filters,places,warnings:failures.length?['部分來源未完整搜尋；已保留其他來源驗證的地點，詳見搜尋診斷。']:[],diagnostics:{
+  const warnings=failures.length?['部分來源未完整搜尋；已保留其他來源驗證的地點，詳見搜尋診斷。']:[];
+  if(!places.length)warnings.push(pool.places.length?'已取得有效地點，但沒有符合目前篩選條件的結果。':incompleteReasons.length?'來源失敗或搜尋未完成，尚不能判定附近沒有地點；請查看診斷或稍後重試。':runs.some(r=>r.rawCount>0)?'來源已返回資料，但候選未通過類別、座標或地理範圍驗證；請查看排除數量。':'已執行來源在本次搜尋範圍未提供候選；不代表附近沒有場所。');
+  return{anchor,mode,filters,places,warnings,diagnostics:{
     originalInput:anchor.originalInput,mode,providers:runs,rounds:roundResults.length,roundResults,
     candidates:roundResults.reduce((n,r)=>n+r.rawCandidates,0),categoryExcluded:pool.category+runs.filter(r=>r.status!=='skipped').reduce((n,r)=>n+r.categoryExcluded,0),
     invalidExcluded:pool.invalid+runs.filter(r=>r.status!=='skipped').reduce((n,r)=>n+r.invalidCount,0),geographyExcluded:pool.geography,duplicateExcluded:pool.duplicates,

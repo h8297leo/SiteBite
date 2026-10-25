@@ -1,8 +1,13 @@
 import { describe,it,expect } from 'vitest';
 import { createPublicFetcher,isPublicAddress,publicUrl,robotsPermits,robotsCrawlDelay } from '../server/secureWeb';
+import { retryDelay } from '../server/http';
 const ctx=()=>({signal:new AbortController().signal,budget:{used:0,limit:20},meter:{requests:0}});
 const publicDns=async()=>[{address:'93.184.216.34',family:4}];
 describe('public web request security (synthetic transport)',()=>{
+  it('honors Retry-After seconds and dates without reducing the existing cooldown',()=>{
+    expect(retryDelay('120',30000)).toBe(120000);expect(retryDelay('1',30000)).toBe(30000);expect(retryDelay('invalid',30000)).toBe(30000);
+    const future=new Date(Date.now()+180000).toUTCString();expect(retryDelay(future,30000)).toBeGreaterThan(178000);
+  });
   it('blocks local, private, metadata, mapped IPv6 and reserved destinations',()=>{
     for(const ip of ['127.0.0.1','10.1.2.3','169.254.169.254','100.100.100.200','192.168.1.2','172.20.1.2','::1','fc00::1','fe80::1','::ffff:127.0.0.1','2001:db8::1','2002:7f00:1::'])expect(isPublicAddress(ip),ip).toBe(false);
     expect(isPublicAddress('8.8.8.8')).toBe(true);expect(isPublicAddress('2606:4700:4700::1111')).toBe(true);

@@ -3,13 +3,35 @@ import { Anchor, defaultFilters, filterPlaces, navigationUrl } from '../shared/m
 import { classifyOsm, overpassQuery } from '../server/engines';
 import { normalizeOsm, classifyArticle, parseTravelListings, DiscoveryProvider, OverpassProvider, WikipediaProvider } from '../server/providers';
 import { CandidatePool, executeSearch } from '../server/searchOrchestrator';
-import { coordinateAnchor } from '../server/locationResolver';
+import { coordinateAnchor, resolveLocation } from '../server/locationResolver';
+import { requestJson } from '../server/http';
+import { mkdir } from 'node:fs/promises';
+vi.mock('node:fs/promises',async importOriginal=>{const actual=await importOriginal<typeof import('node:fs/promises')>();return{...actual,mkdir:vi.fn(actual.mkdir)};});
 const anchor:Anchor={id:'test:anchor',name:'地址測試中心',displayName:'地址測試中心',latitude:25,longitude:121,country:'TW',region:'',city:'',confidence:'user-coordinate',source:'https://www.openstreetmap.org/',category:'搜尋中心',geoType:'address',originalInput:'測試地址'};
 const at='2026-10-12T00:00:00Z';
 const raw={type:'node',id:42,lat:25.001,lon:121,tags:{name:'測試咖啡',amenity:'cafe'}};
 function candidate(id=42){return normalizeOsm({...raw,id},'food',at).candidate!;}
 function fake(id:string,search:DiscoveryProvider['search']):DiscoveryProvider{return{id,role:'geographic',search};}
 describe('core validation — synthetic fixtures only',()=>{
+ it('validated public responses survive an optional disk-cache write failure',async()=>{
+  vi.mocked(mkdir).mockRejectedValueOnce(new Error('synthetic read-only cache'));
+  vi.stubGlobal('fetch',vi.fn(async()=>new Response(JSON.stringify({ok:true}))));
+  try{const r=await requestJson(`http://cache-failure.fixture.invalid/${Date.now()}`,{signal:new AbortController().signal,budget:{used:0,limit:1}},v=>v as {ok:boolean});expect(r.data.ok).toBe(true);}finally{vi.unstubAllGlobals();}
+ });
+ it('Photon failure leaves the existing encyclopedia location resolver available',async()=>{
+  vi.stubEnv('PHOTON_URL','http://resolver-failure.fixture.invalid');
+  vi.stubGlobal('fetch',vi.fn(async(input:string)=>{if(new URL(input).hostname==='resolver-failure.fixture.invalid')throw new Error('synthetic source failure');return new Response(JSON.stringify({query:{pages:{'1':{pageid:1,title:'FixtureTown',fullurl:'https://en.wikipedia.org/wiki/FixtureTown',coordinates:[{lat:25,lon:121,type:'city',country:'TW'}]}}}}));}));
+  try{const locations=await resolveLocation('FixtureTown',{signal:new AbortController().signal,budget:{used:0,limit:4}});expect(locations[0].name).toBe('FixtureTown');expect(locations[0].source).toContain('wikipedia.org');}finally{vi.unstubAllGlobals();vi.unstubAllEnvs();}
+ });
+ it('Overpass HTTP200 timeout remark without candidates tries the alternate endpoint',async()=>{
+  vi.stubEnv('OVERPASS_URL','');vi.stubGlobal('fetch',vi.fn(async(input:string)=>new Response(JSON.stringify(new URL(input).hostname==='overpass-api.de'?{elements:[],remark:'synthetic timeout'}:{elements:[raw]}))));
+  try{const r=await new OverpassProvider().search({anchor,mode:'food',filters:defaultFilters,radius:1234,round:1,signal:new AbortController().signal,budget:{used:0,limit:4}});expect(r.candidates).toHaveLength(1);expect(r.run.endpoint).toContain('private.coffee');expect(r.run.status).toBe('partial');}finally{vi.unstubAllGlobals();vi.unstubAllEnvs();}
+ });
+ it('cancelling a search cannot place a healthy Overpass endpoint in global cooldown',async()=>{
+  vi.stubEnv('OVERPASS_URL','http://cancel.fixture.invalid/overpass');vi.stubGlobal('fetch',vi.fn(async()=>new Response(JSON.stringify({elements:[raw]}))));
+  const cancelled=new AbortController();cancelled.abort();const context={anchor,mode:'food' as const,filters:defaultFilters,radius:4321,round:1,signal:cancelled.signal,budget:{used:0,limit:4}};
+  try{await new OverpassProvider().search(context);const r=await new OverpassProvider().search({...context,signal:new AbortController().signal});expect(r.candidates).toHaveLength(1);}finally{vi.unstubAllGlobals();vi.unstubAllEnvs();}
+ });
  it('reverse geocoder timeout cannot discard a known GPS coordinate (mocked HTTP)',async()=>{
   vi.stubEnv('PHOTON_URL','http://fixture.invalid/gps-timeout');vi.stubGlobal('fetch',vi.fn(async()=>{throw new DOMException('simulated timeout','TimeoutError');}));
   try{const a=await coordinateAnchor(25.123456,121.123456,{signal:new AbortController().signal,budget:{used:0,limit:1}});expect(a.confidence).toBe('user-coordinate');expect(a.latitude).toBe(25.123456);expect(a.longitude).toBe(121.123456);}finally{vi.unstubAllGlobals();vi.unstubAllEnvs();}

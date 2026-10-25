@@ -12,15 +12,18 @@ function asAnchor(f:z.infer<typeof Feature>,input:string):Anchor{
 export async function resolveLocation(query:string,ctx:HttpContext,context?:{latitude:number;longitude:number}):Promise<Anchor[]>{
   const url=new URL('/api/',process.env.PHOTON_URL??'https://photon.komoot.io');url.searchParams.set('q',query);url.searchParams.set('limit','8');
   if(context){url.searchParams.set('lat',String(context.latitude));url.searchParams.set('lon',String(context.longitude));}
-  const response=await requestJson(url.href,ctx,v=>Envelope.parse(v),{},86400000);
-  let anchors=response.data.features.flatMap(v=>{const parsed=Feature.safeParse(v);return parsed.success?[asAnchor(parsed.data,query)]:[];});
+  let anchors:Anchor[]=[];
+  try{const response=await requestJson(url.href,{...ctx,signal:AbortSignal.any([ctx.signal,AbortSignal.timeout(10000)])},v=>Envelope.parse(v),{},86400000);
+    anchors=response.data.features.flatMap(v=>{const parsed=Feature.safeParse(v);return parsed.success?[asAnchor(parsed.data,query)]:[];});
+  }catch{ctx.signal.throwIfAborted();} // Leave time for the existing independent encyclopedia resolver.
   // Generic Taiwanese address decomposition; no named landmark or coordinate exceptions.
   const address=query.normalize('NFKC').match(/^(.*?[市縣])(?:.*?[區鄉鎮])?(.*?(?:路|街|大道))([\d之-]+)號/);
   if(!anchors.length&&address){
     const addressQuery=`${address[2]} ${address[3]} ${address[1].replace(/台/g,'臺')}`;
     const retry=new URL('/api/',process.env.PHOTON_URL??'https://photon.komoot.io');retry.searchParams.set('q',addressQuery);retry.searchParams.set('limit','8');
-    const found=await requestJson(retry.href,ctx,v=>Envelope.parse(v),{},86400000);
-    anchors=found.data.features.flatMap(v=>{const f=Feature.safeParse(v);return f.success?[asAnchor(f.data,query)]:[];});
+    try{const found=await requestJson(retry.href,{...ctx,signal:AbortSignal.any([ctx.signal,AbortSignal.timeout(10000)])},v=>Envelope.parse(v),{},86400000);
+      anchors=found.data.features.flatMap(v=>{const f=Feature.safeParse(v);return f.success?[asAnchor(f.data,query)]:[];});
+    }catch{ctx.signal.throwIfAborted();}
   }
   if(!address&&query.length<=60&&!/^\d+$/.test(query)){
     try{anchors=[...await wikiCenters(query.replace(/(?:市中心|市區中心|城市中心)$/,'市'),ctx),...anchors];}catch{/* independent resolver evidence source; Photon choices still usable */}
