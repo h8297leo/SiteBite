@@ -1,0 +1,2902 @@
+{
+  "anchor": {
+    "latitude": 24.8610993,
+    "longitude": 121.2100279,
+    "id": "relation/6726244",
+    "displayName": "龍潭大池，上林里，桃園市，臺灣",
+    "name": "龍潭大池",
+    "country": "TW",
+    "region": "上林里",
+    "city": "桃園市",
+    "confidence": "source-match",
+    "source": "https://www.openstreetmap.org/relation/6726244",
+    "category": "搜尋中心",
+    "geoType": "water:pond",
+    "originalInput": "龍潭大池"
+  },
+  "mode": "food",
+  "filters": {
+    "category": "全部",
+    "meal": null,
+    "feature": null,
+    "maxDistance": null,
+    "minRating": null,
+    "sort": "distance"
+  },
+  "places": [
+    {
+      "latitude": 24.8606475,
+      "longitude": 121.2108343,
+      "id": "osm:way/1273860923",
+      "name": "The胖",
+      "originalName": "The胖",
+      "aliases": [
+        "The胖"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/way/1273860923",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "way",
+      "osmId": 1273860923,
+      "osmTags": {
+        "amenity": "restaurant",
+        "building": "yes",
+        "name": "The胖"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "way/1273860923",
+          "url": "https://www.openstreetmap.org/way/1273860923",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 95.61904638085939
+    },
+    {
+      "latitude": 24.8613791,
+      "longitude": 121.2118985,
+      "id": "osm:node/12750019766",
+      "name": "QQ田甜品工坊",
+      "originalName": "QQ田甜品工坊",
+      "aliases": [
+        "QQ田甜品工坊"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "甜點",
+      "address": "桃園市神龍路130巷29",
+      "sourceUrl": "https://www.openstreetmap.org/node/12750019766",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 12750019766,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區上林里20鄰神龍路130巷29號五樓",
+        "addr:hamlet": "上林里",
+        "addr:housenumber": "29",
+        "addr:neighbourhood": "20",
+        "addr:street": "神龍路130巷",
+        "name": "QQ田甜品工坊",
+        "shop": "confectionery"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/12750019766",
+          "url": "https://www.openstreetmap.org/node/12750019766",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 191.2727941489068
+    },
+    {
+      "latitude": 24.8622999,
+      "longitude": 121.2121191,
+      "id": "osm:node/4191114224",
+      "name": "大楊梅鵝莊",
+      "originalName": "大楊梅鵝莊",
+      "aliases": [
+        "大楊梅鵝莊"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/4191114224",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4191114224,
+      "osmTags": {
+        "amenity": "restaurant",
+        "cuisine": "chinese",
+        "delivery": "no",
+        "name": "大楊梅鵝莊",
+        "smoking": "no",
+        "takeaway": "yes"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4191114224",
+          "url": "https://www.openstreetmap.org/node/4191114224",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 249.6706650583173
+    },
+    {
+      "latitude": 24.8627492,
+      "longitude": 121.2081391,
+      "id": "osm:node/12741282187",
+      "name": "沐沐鍋物",
+      "originalName": "沐沐鍋物",
+      "aliases": [
+        "沐沐鍋物"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市中豐路上林段121",
+      "sourceUrl": "https://www.openstreetmap.org/node/12741282187",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 12741282187,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區上林里3鄰中豐路上林段121號",
+        "addr:hamlet": "上林里",
+        "addr:housenumber": "121",
+        "addr:neighbourhood": "3",
+        "addr:street": "中豐路上林段",
+        "amenity": "restaurant",
+        "branch": "龍潭店",
+        "cuisine": "hotpot",
+        "name": "沐沐鍋物"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/12741282187",
+          "url": "https://www.openstreetmap.org/node/12741282187",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 264.52052637772243
+    },
+    {
+      "latitude": 24.8614036,
+      "longitude": 121.2126744,
+      "id": "osm:node/4191114225",
+      "name": "小時厚牛排",
+      "originalName": "小時厚牛排",
+      "aliases": [
+        "小時厚牛排"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市神龍路150",
+      "sourceUrl": "https://www.openstreetmap.org/node/4191114225",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4191114225,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區神龍路150號",
+        "addr:housenumber": "150",
+        "addr:street": "神龍路",
+        "amenity": "restaurant",
+        "branch": "桃園龍潭店",
+        "cuisine": "steak_house",
+        "name": "小時厚牛排",
+        "opening_hours": "Mo-Su 11:00-21:00",
+        "takeaway": "yes"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Su 11:00-21:00",
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4191114225",
+          "url": "https://www.openstreetmap.org/node/4191114225",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 269.1417110812817
+    },
+    {
+      "latitude": 24.8638037,
+      "longitude": 121.2092949,
+      "id": "osm:node/7698489645",
+      "name": "龍情花生",
+      "originalName": "龍情花生",
+      "aliases": [
+        "龍情花生"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "甜點",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/7698489645",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 7698489645,
+      "osmTags": {
+        "name": "龍情花生",
+        "shop": "confectionery"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/7698489645",
+          "url": "https://www.openstreetmap.org/node/7698489645",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 309.67520178710697
+    },
+    {
+      "latitude": 24.8638508,
+      "longitude": 121.2094065,
+      "id": "osm:node/12750019765",
+      "name": "大腕屋牛排",
+      "originalName": "大腕屋牛排",
+      "aliases": [
+        "大腕屋牛排"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市龍元路160",
+      "sourceUrl": "https://www.openstreetmap.org/node/12750019765",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 12750019765,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區上林里1鄰龍元路160號",
+        "addr:hamlet": "上林里",
+        "addr:housenumber": "160",
+        "addr:neighbourhood": "1",
+        "addr:street": "龍元路",
+        "amenity": "restaurant",
+        "cuisine": "steak_house",
+        "name": "大腕屋牛排"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/12750019765",
+          "url": "https://www.openstreetmap.org/node/12750019765",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 312.30995302999963
+    },
+    {
+      "latitude": 24.8643269,
+      "longitude": 121.2109043,
+      "id": "osm:node/6849123313",
+      "name": "麻豆子健康湯鍋",
+      "originalName": "麻豆子健康湯鍋",
+      "aliases": [
+        "麻豆子健康湯鍋"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/6849123313",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6849123313,
+      "osmTags": {
+        "amenity": "restaurant",
+        "name": "麻豆子健康湯鍋"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6849123313",
+          "url": "https://www.openstreetmap.org/node/6849123313",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 369.62408580607433
+    },
+    {
+      "latitude": 24.8644237,
+      "longitude": 121.2105855,
+      "id": "osm:node/12743891519",
+      "name": "煎豐厚切牛排",
+      "originalName": "煎豐厚切牛排",
+      "aliases": [
+        "煎豐厚切牛排"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/12743891519",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 12743891519,
+      "osmTags": {
+        "amenity": "restaurant",
+        "cuisine": "steak_house",
+        "name": "煎豐厚切牛排"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/12743891519",
+          "url": "https://www.openstreetmap.org/node/12743891519",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 373.91252352115936
+    },
+    {
+      "latitude": 24.8644205,
+      "longitude": 121.21104,
+      "id": "osm:node/12743891518",
+      "name": "郭記胡椒餅",
+      "originalName": "郭記胡椒餅",
+      "aliases": [
+        "郭記胡椒餅"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "小吃",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/12743891518",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 12743891518,
+      "osmTags": {
+        "amenity": "fast_food",
+        "name": "郭記胡椒餅"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/12743891518",
+          "url": "https://www.openstreetmap.org/node/12743891518",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 383.1570817572358
+    },
+    {
+      "latitude": 24.8646765,
+      "longitude": 121.2112508,
+      "id": "osm:node/4515733295",
+      "name": "橋頭老麵店",
+      "originalName": "橋頭老麵店",
+      "aliases": [
+        "橋頭老麵店"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市西龍路43",
+      "sourceUrl": "https://www.openstreetmap.org/node/4515733295",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4515733295,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區西龍路43號",
+        "addr:housenumber": "43",
+        "addr:postcode": "325",
+        "addr:street": "西龍路",
+        "amenity": "restaurant",
+        "cuisine": "noodle",
+        "name": "橋頭老麵店",
+        "opening_hours": "We-Mo 10:00-18:00",
+        "phone": "+886 3 489 6915"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": "We-Mo 10:00-18:00",
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4515733295",
+          "url": "https://www.openstreetmap.org/node/4515733295",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 416.46140736015377
+    },
+    {
+      "latitude": 24.8642243,
+      "longitude": 121.2131484,
+      "id": "osm:node/13757925759",
+      "name": "食坪異國美食",
+      "originalName": "食坪異國美食",
+      "aliases": [
+        "食坪異國美食"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市南龍路34號",
+      "sourceUrl": "https://www.openstreetmap.org/node/13757925759",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 13757925759,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區南龍路34號",
+        "addr:housenumber": "34號",
+        "addr:street": "南龍路",
+        "amenity": "restaurant",
+        "cuisine": "mexican",
+        "name": "食坪異國美食"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/13757925759",
+          "url": "https://www.openstreetmap.org/node/13757925759",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 468.8921154210169
+    },
+    {
+      "latitude": 24.8606161,
+      "longitude": 121.2052101,
+      "id": "osm:way/1503291966",
+      "name": "印度香料 馬薩拉餐廳",
+      "originalName": "印度香料 馬薩拉餐廳",
+      "aliases": [
+        "印度香料 馬薩拉餐廳"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市中豐路上林段269號",
+      "sourceUrl": "https://www.openstreetmap.org/way/1503291966",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "way",
+      "osmId": 1503291966,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區中豐路上林段269號",
+        "addr:housenumber": "269號",
+        "addr:street": "中豐路上林段",
+        "amenity": "restaurant",
+        "building": "yes",
+        "cuisine": "indian;curry",
+        "name": "印度香料 馬薩拉餐廳"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "way/1503291966",
+          "url": "https://www.openstreetmap.org/way/1503291966",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 489.03154424032823
+    },
+    {
+      "latitude": 24.8655731,
+      "longitude": 121.2116949,
+      "id": "osm:node/4548163590",
+      "name": "九湯屋拉麵",
+      "originalName": "九湯屋拉麵",
+      "aliases": [
+        "九湯屋拉麵"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市北龍路27",
+      "sourceUrl": "https://www.openstreetmap.org/node/4548163590",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4548163590,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區北龍路27號",
+        "addr:housenumber": "27",
+        "addr:postcode": "325",
+        "addr:street": "北龍路",
+        "amenity": "restaurant",
+        "name": "九湯屋拉麵",
+        "phone": "+886 3 479 8129"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4548163590",
+          "url": "https://www.openstreetmap.org/node/4548163590",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 525.1240427040779
+    },
+    {
+      "latitude": 24.8656007,
+      "longitude": 121.2125485,
+      "id": "osm:node/4548108301",
+      "name": "清心福全",
+      "originalName": "清心福全",
+      "aliases": [
+        "清心福全",
+        "Ching Shin",
+        "清心福全"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "咖啡廳",
+      "address": "桃園市北龍路66",
+      "sourceUrl": "https://www.openstreetmap.org/node/4548108301",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4548108301,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區北龍路66號",
+        "addr:housenumber": "66",
+        "addr:postcode": "325",
+        "addr:street": "北龍路",
+        "amenity": "cafe",
+        "brand": "清心福全",
+        "brand:en": "Ching Shin",
+        "brand:wikidata": "Q10391229",
+        "brand:wikipedia": "zh:清心福全冷飲站",
+        "brand:zh": "清心福全",
+        "cuisine": "bubble_tea",
+        "name": "清心福全",
+        "name:en": "Ching Shin",
+        "name:zh": "清心福全",
+        "phone": "+886 3 409 7979",
+        "shop": "beverages",
+        "takeaway": "yes"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4548108301",
+          "url": "https://www.openstreetmap.org/node/4548108301",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 561.4281272790262
+    },
+    {
+      "latitude": 24.8644881,
+      "longitude": 121.2141746,
+      "id": "osm:node/4548159893",
+      "name": "茶湯會",
+      "originalName": "茶湯會",
+      "aliases": [
+        "茶湯會",
+        "TP Tea",
+        "茶湯會"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "咖啡廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/4548159893",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4548159893,
+      "osmTags": {
+        "amenity": "cafe",
+        "brand": "茶湯會",
+        "brand:en": "TP Tea",
+        "brand:wikidata": "Q108166023",
+        "brand:zh": "茶湯會",
+        "cuisine": "bubble_tea",
+        "name": "茶湯會",
+        "name:en": "TP Tea",
+        "name:zh": "茶湯會",
+        "shop": "beverages",
+        "takeaway": "yes"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4548159893",
+          "url": "https://www.openstreetmap.org/node/4548159893",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 563.039672537922
+    },
+    {
+      "latitude": 24.8651428,
+      "longitude": 121.213895,
+      "id": "osm:node/4515663791",
+      "name": "麥之鄉西點蛋糕",
+      "originalName": "麥之鄉西點蛋糕",
+      "aliases": [
+        "麥之鄉西點蛋糕"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "甜點",
+      "address": "桃園市龍元路1",
+      "sourceUrl": "https://www.openstreetmap.org/node/4515663791",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4515663791,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區龍元路1號",
+        "addr:housenumber": "1",
+        "addr:postcode": "325",
+        "addr:street": "龍元路",
+        "name": "麥之鄉西點蛋糕",
+        "phone": "+886 3 479 8855",
+        "shop": "bakery"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4515663791",
+          "url": "https://www.openstreetmap.org/node/4515663791",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 595.2897823175415
+    },
+    {
+      "latitude": 24.8650303,
+      "longitude": 121.21416,
+      "id": "osm:node/5029220522",
+      "name": "中原客家小吃",
+      "originalName": "中原客家小吃",
+      "aliases": [
+        "中原客家小吃"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市東龍路232",
+      "sourceUrl": "https://www.openstreetmap.org/node/5029220522",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 5029220522,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區東龍路232號",
+        "addr:housenumber": "232",
+        "addr:postcode": "325",
+        "addr:street": "東龍路",
+        "amenity": "restaurant",
+        "name": "中原客家小吃",
+        "opening_hours": "Th-Tu 11:00-21:30",
+        "phone": "+886 3 480 7781"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": "Th-Tu 11:00-21:30",
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/5029220522",
+          "url": "https://www.openstreetmap.org/node/5029220522",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 604.0314919375252
+    },
+    {
+      "latitude": 24.8634479,
+      "longitude": 121.2162716,
+      "id": "osm:node/5031558322",
+      "name": "NU PASTA",
+      "originalName": "NU PASTA",
+      "aliases": [
+        "NU PASTA"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市龍華路145",
+      "sourceUrl": "https://www.openstreetmap.org/node/5031558322",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 5031558322,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區龍華路145號",
+        "addr:housenumber": "145",
+        "addr:postcode": "325",
+        "addr:street": "龍華路",
+        "amenity": "restaurant",
+        "branch": "龍潭店",
+        "brand": "NU PASTA",
+        "cuisine": "italian",
+        "name": "NU PASTA",
+        "opening_hours": "Mo-Su 11:00-21:30",
+        "phone": "+886 3 479 6299",
+        "takeaway": "yes",
+        "website": "http://www.nu-pasta.com.tw/M/index.aspx"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Su 11:00-21:30",
+      "website": "http://www.nu-pasta.com.tw/M/index.aspx",
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/5031558322",
+          "url": "https://www.openstreetmap.org/node/5031558322",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 681.9123959099003
+    },
+    {
+      "latitude": 24.8666485,
+      "longitude": 121.2064513,
+      "id": "osm:node/6635287889",
+      "name": "樂農匯",
+      "originalName": "樂農匯",
+      "aliases": [
+        "樂農匯",
+        "Pretty Garden",
+        "樂農匯"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "咖啡廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/6635287889",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6635287889,
+      "osmTags": {
+        "amenity": "cafe",
+        "internet_access": "wlan",
+        "name": "樂農匯",
+        "name:en": "Pretty Garden",
+        "name:zh": "樂農匯"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6635287889",
+          "url": "https://www.openstreetmap.org/node/6635287889",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 714.8042058447077
+    },
+    {
+      "latitude": 24.862367,
+      "longitude": 121.217367,
+      "id": "osm:node/9477495198",
+      "name": "杏園小吃",
+      "originalName": "杏園小吃",
+      "aliases": [
+        "杏園小吃"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市中正路276",
+      "sourceUrl": "https://www.openstreetmap.org/node/9477495198",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 9477495198,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區中正路276號",
+        "addr:housenumber": "276",
+        "addr:postcode": "325",
+        "addr:street": "中正路",
+        "amenity": "restaurant",
+        "cuisine": "regional",
+        "name": "杏園小吃",
+        "opening_hours": "Tu-Su 09:00-20:00",
+        "phone": "+88634801849"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": "Tu-Su 09:00-20:00",
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/9477495198",
+          "url": "https://www.openstreetmap.org/node/9477495198",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 753.7397559828298
+    },
+    {
+      "latitude": 24.8636399,
+      "longitude": 121.2169879,
+      "id": "osm:node/5033575121",
+      "name": "85度C中正店",
+      "originalName": "85度C中正店",
+      "aliases": [
+        "85度C中正店",
+        "85度C中正店"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "咖啡廳",
+      "address": "桃園市中正路226",
+      "sourceUrl": "https://www.openstreetmap.org/node/5033575121",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 5033575121,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區中正路226號",
+        "addr:housenumber": "226",
+        "addr:postcode": "325",
+        "addr:street": "中正路",
+        "amenity": "cafe",
+        "name": "85度C中正店",
+        "name:zh": "85度C中正店",
+        "opening_hours": "Mo-Su 07:00-23:00",
+        "phone": "+886 3 489 8985",
+        "website": "https://www.85cafe.com/index.php"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Su 07:00-23:00",
+      "website": "https://www.85cafe.com/index.php",
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/5033575121",
+          "url": "https://www.openstreetmap.org/node/5033575121",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 756.8874299280959
+    },
+    {
+      "latitude": 24.8664144,
+      "longitude": 121.2147725,
+      "id": "osm:node/4515526990",
+      "name": "85度C咖啡蛋糕",
+      "originalName": "85度C咖啡蛋糕",
+      "aliases": [
+        "85度C咖啡蛋糕"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "咖啡廳",
+      "address": "桃園市北龍路148",
+      "sourceUrl": "https://www.openstreetmap.org/node/4515526990",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4515526990,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區北龍路148號",
+        "addr:housenumber": "148",
+        "addr:postcode": "325",
+        "addr:street": "北龍路",
+        "amenity": "cafe",
+        "name": "85度C咖啡蛋糕",
+        "opening_hours": "Mo-Su 06:30-23:30",
+        "phone": "+886 3 479 1185",
+        "website": "https://www.85cafe.com/newsactivity.php"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Su 06:30-23:30",
+      "website": "https://www.85cafe.com/newsactivity.php",
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4515526990",
+          "url": "https://www.openstreetmap.org/node/4515526990",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 760.5423774510889
+    },
+    {
+      "latitude": 24.8669837,
+      "longitude": 121.2153823,
+      "id": "osm:node/4515663790",
+      "name": "必勝客披薩",
+      "originalName": "必勝客披薩",
+      "aliases": [
+        "必勝客披薩"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市北龍路183",
+      "sourceUrl": "https://www.openstreetmap.org/node/4515663790",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4515663790,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區北龍路183號",
+        "addr:housenumber": "183",
+        "addr:postcode": "325",
+        "addr:street": "北龍路",
+        "amenity": "restaurant",
+        "name": "必勝客披薩",
+        "opening_hours": "Mo-Su 11:00-23:00",
+        "phone": "+886 3 499 5088"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Su 11:00-23:00",
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4515663790",
+          "url": "https://www.openstreetmap.org/node/4515663790",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 848.4923781797621
+    },
+    {
+      "latitude": 24.8594563,
+      "longitude": 121.2183821,
+      "id": "osm:node/6572746341",
+      "name": "Tasty 西堤牛排",
+      "originalName": "Tasty 西堤牛排",
+      "aliases": [
+        "Tasty 西堤牛排"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/6572746341",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6572746341,
+      "osmTags": {
+        "amenity": "restaurant",
+        "cuisine": "steak_house",
+        "name": "Tasty 西堤牛排"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6572746341",
+          "url": "https://www.openstreetmap.org/node/6572746341",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 862.4370331471207
+    },
+    {
+      "latitude": 24.8588488,
+      "longitude": 121.2186075,
+      "id": "osm:node/6572746307",
+      "name": "淳牛食堂",
+      "originalName": "淳牛食堂",
+      "aliases": [
+        "淳牛食堂"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/6572746307",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6572746307,
+      "osmTags": {
+        "amenity": "restaurant",
+        "cuisine": "beef_noodle",
+        "name": "淳牛食堂"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6572746307",
+          "url": "https://www.openstreetmap.org/node/6572746307",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 901.0542264504166
+    },
+    {
+      "latitude": 24.8674524,
+      "longitude": 121.2158198,
+      "id": "osm:node/10846624930",
+      "name": "漢堡王",
+      "originalName": "漢堡王",
+      "aliases": [
+        "漢堡王",
+        "Burger King",
+        "漢堡王"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "小吃",
+      "address": "桃園市中正路106",
+      "sourceUrl": "https://www.openstreetmap.org/node/10846624930",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 10846624930,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區中正路106號",
+        "addr:housenumber": "106",
+        "addr:street": "中正路",
+        "amenity": "fast_food",
+        "branch": "龍潭中正店",
+        "branch:en": "Kaohsiung Mingcheng Store",
+        "brand": "漢堡王",
+        "brand:en": "Burger King",
+        "brand:wikidata": "Q177054",
+        "brand:wikipedia": "en:Burger King",
+        "brand:zh": "漢堡王",
+        "cuisine": "burger",
+        "drive_through": "no",
+        "name": "漢堡王",
+        "name:en": "Burger King",
+        "name:ja": "バーガーキング",
+        "name:zh": "漢堡王",
+        "operator": "家城股份有限公司",
+        "ref:vatin": "TW23309178",
+        "takeaway": "yes"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/10846624930",
+          "url": "https://www.openstreetmap.org/node/10846624930",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 916.783090049602
+    },
+    {
+      "latitude": 24.8665197,
+      "longitude": 121.2169169,
+      "id": "osm:node/4515560989",
+      "name": "爭鮮迴轉壽司",
+      "originalName": "爭鮮迴轉壽司",
+      "aliases": [
+        "爭鮮迴轉壽司"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市中正路153",
+      "sourceUrl": "https://www.openstreetmap.org/node/4515560989",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4515560989,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區中正路153號",
+        "addr:housenumber": "153",
+        "addr:postcode": "325",
+        "addr:street": "中正路",
+        "amenity": "restaurant",
+        "brand": "爭鮮迴轉壽司",
+        "name": "爭鮮迴轉壽司",
+        "opening_hours": "Mo-Su 11:00-21:30",
+        "phone": "+886 3 470 7161",
+        "website": "https://sushiexpress.com.tw/"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Su 11:00-21:30",
+      "website": "https://sushiexpress.com.tw/",
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4515560989",
+          "url": "https://www.openstreetmap.org/node/4515560989",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 919.9587755006546
+    },
+    {
+      "latitude": 24.8645134,
+      "longitude": 121.2185879,
+      "id": "osm:node/9599830160",
+      "name": "安安日式食堂(龍潭店)",
+      "originalName": "安安日式食堂(龍潭店)",
+      "aliases": [
+        "安安日式食堂(龍潭店)"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市大同路329",
+      "sourceUrl": "https://www.openstreetmap.org/node/9599830160",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 9599830160,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區大同路329號",
+        "addr:housenumber": "329",
+        "addr:postcode": "325",
+        "addr:street": "大同路",
+        "amenity": "restaurant",
+        "branch": "龍潭店",
+        "cuisine": "japanese",
+        "name": "安安日式食堂(龍潭店)",
+        "opening_hours": "11:00-14:00; 17:00-20:00",
+        "phone": "+886 34792776",
+        "source": "https://mnya.tw/yo/word/2296.html",
+        "website": "https://japanese-curry-restaurant-760.business.site/"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": "11:00-14:00; 17:00-20:00",
+      "website": "https://japanese-curry-restaurant-760.business.site/",
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/9599830160",
+          "url": "https://www.openstreetmap.org/node/9599830160",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 943.367518270578
+    },
+    {
+      "latitude": 24.8676964,
+      "longitude": 121.2159977,
+      "id": "osm:node/6572746354",
+      "name": "摩斯漢堡",
+      "originalName": "摩斯漢堡",
+      "aliases": [
+        "摩斯漢堡",
+        "MOS Burger",
+        "摩斯漢堡"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "小吃",
+      "address": "桃園市中正路119",
+      "sourceUrl": "https://www.openstreetmap.org/node/6572746354",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6572746354,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區中正路119號",
+        "addr:housenumber": "119",
+        "addr:street": "中正路",
+        "amenity": "fast_food",
+        "brand": "摩斯漢堡",
+        "brand:en": "MOS Burger",
+        "brand:wikidata": "Q1204169",
+        "brand:wikipedia": "zh:摩斯漢堡",
+        "brand:zh": "摩斯漢堡",
+        "cuisine": "burger",
+        "name": "摩斯漢堡",
+        "name:en": "MOS Burger",
+        "name:ja": "モスバーガー",
+        "name:zh": "摩斯漢堡",
+        "phone": "+886 3 489 9564",
+        "takeaway": "yes"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6572746354",
+          "url": "https://www.openstreetmap.org/node/6572746354",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 949.1349439415598
+    },
+    {
+      "latitude": 24.8686323,
+      "longitude": 121.2146137,
+      "id": "osm:node/6063857571",
+      "name": "Noble Family",
+      "originalName": "Noble Family",
+      "aliases": [
+        "Noble Family"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/6063857571",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6063857571,
+      "osmTags": {
+        "amenity": "restaurant",
+        "cuisine": "steak",
+        "name": "Noble Family",
+        "phone": "+886 3 4095258"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6063857571",
+          "url": "https://www.openstreetmap.org/node/6063857571",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 956.9068712318789
+    },
+    {
+      "latitude": 24.8679909,
+      "longitude": 121.2157107,
+      "id": "osm:node/6572746355",
+      "name": "旅活樂咖啡館",
+      "originalName": "旅活樂咖啡館",
+      "aliases": [
+        "旅活樂咖啡館",
+        "Cafe Traveller",
+        "旅活樂咖啡館"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "咖啡廳",
+      "address": "桃園市中正路103",
+      "sourceUrl": "https://www.openstreetmap.org/node/6572746355",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6572746355,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區中正路103號",
+        "addr:housenumber": "103",
+        "addr:street": "中正路",
+        "amenity": "cafe",
+        "name": "旅活樂咖啡館",
+        "name:en": "Cafe Traveller",
+        "name:zh": "旅活樂咖啡館",
+        "phone": "+886 3 409 3549"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6572746355",
+          "url": "https://www.openstreetmap.org/node/6572746355",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 957.0440102867424
+    },
+    {
+      "latitude": 24.8680274,
+      "longitude": 121.2156812,
+      "id": "osm:node/6572746357",
+      "name": "米吉米早餐",
+      "originalName": "米吉米早餐",
+      "aliases": [
+        "米吉米早餐"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/6572746357",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6572746357,
+      "osmTags": {
+        "amenity": "restaurant",
+        "cuisine": "breakfast",
+        "name": "米吉米早餐"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐",
+        "早餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6572746357",
+          "url": "https://www.openstreetmap.org/node/6572746357",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 958.5229025371325
+    },
+    {
+      "latitude": 24.8681634,
+      "longitude": 121.2154828,
+      "id": "osm:node/6849143941",
+      "name": "拿坡里披薩",
+      "originalName": "拿坡里披薩",
+      "aliases": [
+        "拿坡里披薩"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/6849143941",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6849143941,
+      "osmTags": {
+        "amenity": "restaurant",
+        "name": "拿坡里披薩"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6849143941",
+          "url": "https://www.openstreetmap.org/node/6849143941",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 959.0947328339164
+    },
+    {
+      "latitude": 24.8680992,
+      "longitude": 121.2156222,
+      "id": "osm:node/6572746359",
+      "name": "大鍋湯風味小館",
+      "originalName": "大鍋湯風味小館",
+      "aliases": [
+        "大鍋湯風味小館"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/6572746359",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6572746359,
+      "osmTags": {
+        "amenity": "restaurant",
+        "cuisine": "chinese",
+        "name": "大鍋湯風味小館"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6572746359",
+          "url": "https://www.openstreetmap.org/node/6572746359",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 961.4448724800975
+    },
+    {
+      "latitude": 24.867614,
+      "longitude": 121.2166471,
+      "id": "osm:node/4515526202",
+      "name": "Domino's",
+      "originalName": "Domino's",
+      "aliases": [
+        "Domino's"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "小吃",
+      "address": "桃園市北龍路249",
+      "sourceUrl": "https://www.openstreetmap.org/node/4515526202",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4515526202,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區北龍路249號",
+        "addr:housenumber": "249",
+        "addr:postcode": "325",
+        "addr:street": "北龍路",
+        "amenity": "fast_food",
+        "brand": "Domino's",
+        "brand:wikidata": "Q839466",
+        "brand:wikipedia": "en:Domino's Pizza",
+        "cuisine": "pizza",
+        "name": "Domino's",
+        "opening_hours": "Mo-Su 11:00-21:00",
+        "phone": "+886 3 499 5252",
+        "takeaway": "yes"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Su 11:00-21:00",
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4515526202",
+          "url": "https://www.openstreetmap.org/node/4515526202",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 985.2460810742889
+    },
+    {
+      "latitude": 24.857492,
+      "longitude": 121.219034,
+      "id": "osm:node/7699777463",
+      "name": "鮮茶道",
+      "originalName": "鮮茶道",
+      "aliases": [
+        "鮮茶道"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "咖啡廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/node/7699777463",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 7699777463,
+      "osmTags": {
+        "amenity": "cafe",
+        "brand": "鮮茶道",
+        "brand:wikidata": "Q108166223",
+        "cuisine": "bubble_tea",
+        "name": "鮮茶道",
+        "shop": "beverages",
+        "takeaway": "yes"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/7699777463",
+          "url": "https://www.openstreetmap.org/node/7699777463",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 993.2390031992231
+    },
+    {
+      "latitude": 24.8552777,
+      "longitude": 121.2178021,
+      "id": "osm:way/1363468207",
+      "name": "Roadies路帝斯美式餐廳",
+      "originalName": "Roadies路帝斯美式餐廳",
+      "aliases": [
+        "Roadies路帝斯美式餐廳"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市龍華路500",
+      "sourceUrl": "https://www.openstreetmap.org/way/1363468207",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "way",
+      "osmId": 1363468207,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區龍華路500號",
+        "addr:housenumber": "500",
+        "addr:street": "龍華路",
+        "air_conditioning": "yes",
+        "amenity": "restaurant",
+        "bar": "yes",
+        "building": "yes",
+        "check_date": "2025-02-28",
+        "cuisine": "mexican;pizza",
+        "delivery": "yes",
+        "name": "Roadies路帝斯美式餐廳",
+        "opening_hours": "Sa-Su 11:00-21:00; Tu-Th 06:30-21:00; Mo 17:00-21:00; Fr 09:00-18:00",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "payment:coins": "yes",
+        "phone": "+886 939 138 313",
+        "reservation": "yes",
+        "takeaway": "yes",
+        "website": "https://roadies.com.tw",
+        "wheelchair": "no"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": "Sa-Su 11:00-21:00; Tu-Th 06:30-21:00; Mo 17:00-21:00; Fr 09:00-18:00",
+      "website": "https://roadies.com.tw/",
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "way/1363468207",
+          "url": "https://www.openstreetmap.org/way/1363468207",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1016.9864602693775
+    },
+    {
+      "latitude": 24.8571228,
+      "longitude": 121.2191814,
+      "id": "osm:node/9662162082",
+      "name": "清心福全",
+      "originalName": "清心福全",
+      "aliases": [
+        "清心福全",
+        "Ching Shin",
+        "清心福全"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "咖啡廳",
+      "address": "桃園市中正路498",
+      "sourceUrl": "https://www.openstreetmap.org/node/9662162082",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 9662162082,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區中正路498號",
+        "addr:housenumber": "498",
+        "addr:street": "中正路",
+        "amenity": "cafe",
+        "brand": "清心福全",
+        "brand:en": "Ching Shin",
+        "brand:wikidata": "Q10391229",
+        "brand:wikipedia": "zh:清心福全冷飲站",
+        "brand:zh": "清心福全",
+        "cuisine": "bubble_tea",
+        "name": "清心福全",
+        "name:en": "Ching Shin",
+        "name:zh": "清心福全",
+        "opening_hours": "Mo-Su 09:30-22:00",
+        "takeaway": "yes"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Su 09:30-22:00",
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/9662162082",
+          "url": "https://www.openstreetmap.org/node/9662162082",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1023.9103721959412
+    },
+    {
+      "latitude": 24.8548665,
+      "longitude": 121.2178411,
+      "id": "osm:way/1503271281",
+      "name": "此刻披薩",
+      "originalName": "此刻披薩",
+      "aliases": [
+        "此刻披薩"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "小吃",
+      "address": "桃園市富華街4號",
+      "sourceUrl": "https://www.openstreetmap.org/way/1503271281",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "way",
+      "osmId": 1503271281,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區富華街4號",
+        "addr:housenumber": "4號",
+        "addr:street": "富華街",
+        "amenity": "fast_food",
+        "building": "yes",
+        "cuisine": "pizza",
+        "name": "此刻披薩"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "way/1503271281",
+          "url": "https://www.openstreetmap.org/way/1503271281",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1049.6374084994673
+    },
+    {
+      "latitude": 24.867797,
+      "longitude": 121.2174833,
+      "id": "osm:node/9562270268",
+      "name": "路易莎咖啡",
+      "originalName": "路易莎咖啡",
+      "aliases": [
+        "路易莎咖啡",
+        "Louisa Coffee",
+        "路易莎咖啡"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "咖啡廳",
+      "address": "桃園市北龍路266",
+      "sourceUrl": "https://www.openstreetmap.org/node/9562270268",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 9562270268,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區北龍路266號",
+        "addr:housenumber": "266",
+        "addr:street": "北龍路",
+        "amenity": "cafe",
+        "brand": "路易莎咖啡",
+        "brand:en": "Louisa Coffee",
+        "brand:wikidata": "Q96390921",
+        "brand:wikipedia": "zh:路易莎咖啡",
+        "brand:zh": "路易莎咖啡",
+        "cuisine": "coffee_shop",
+        "name": "路易莎咖啡",
+        "name:en": "Louisa Coffee",
+        "name:zh": "路易莎咖啡",
+        "opening_hours": "Mo-Su 07:00-21:00",
+        "takeaway": "yes"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Su 07:00-21:00",
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/9562270268",
+          "url": "https://www.openstreetmap.org/node/9562270268",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1058.487176497217
+    },
+    {
+      "latitude": 24.8589252,
+      "longitude": 121.2204651,
+      "id": "osm:node/6572746304",
+      "name": "桂竹屋客家菜",
+      "originalName": "桂竹屋客家菜",
+      "aliases": [
+        "桂竹屋客家菜"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市大同路99",
+      "sourceUrl": "https://www.openstreetmap.org/node/6572746304",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6572746304,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區大同路99號",
+        "addr:housenumber": "99",
+        "addr:street": "大同路",
+        "amenity": "restaurant",
+        "cuisine": "chinese",
+        "name": "桂竹屋客家菜",
+        "phone": "+886 3 479 2026"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6572746304",
+          "url": "https://www.openstreetmap.org/node/6572746304",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1080.4166865857273
+    },
+    {
+      "latitude": 24.869582,
+      "longitude": 121.2047946,
+      "id": "osm:node/4515029190",
+      "name": "早點傳統蛋餅店",
+      "originalName": "早點傳統蛋餅店",
+      "aliases": [
+        "早點傳統蛋餅店"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市聖亭路229",
+      "sourceUrl": "https://www.openstreetmap.org/node/4515029190",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4515029190,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區聖亭路229號",
+        "addr:housenumber": "229",
+        "addr:postcode": "325",
+        "addr:street": "聖亭路",
+        "amenity": "restaurant",
+        "cuisine": "breakfast",
+        "name": "早點傳統蛋餅店",
+        "opening_hours": "Mo-Sa 06:30-10:30"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐",
+        "早餐"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Sa 06:30-10:30",
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4515029190",
+          "url": "https://www.openstreetmap.org/node/4515029190",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1080.9455185121974
+    },
+    {
+      "latitude": 24.8585358,
+      "longitude": 121.220449,
+      "id": "osm:node/6572746305",
+      "name": "新林鐵板燒",
+      "originalName": "新林鐵板燒",
+      "aliases": [
+        "新林鐵板燒"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市大同路87",
+      "sourceUrl": "https://www.openstreetmap.org/node/6572746305",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 6572746305,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區大同路87號",
+        "addr:housenumber": "87",
+        "addr:street": "大同路",
+        "amenity": "restaurant",
+        "cuisine": "teppanyaki",
+        "name": "新林鐵板燒",
+        "phone": "+886 3 480 1417"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/6572746305",
+          "url": "https://www.openstreetmap.org/node/6572746305",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1089.3554635265277
+    },
+    {
+      "latitude": 24.866773,
+      "longitude": 121.2189028,
+      "id": "osm:node/9562270251",
+      "name": "錢都日式涮涮鍋",
+      "originalName": "錢都日式涮涮鍋",
+      "aliases": [
+        "錢都日式涮涮鍋"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市公園路68",
+      "sourceUrl": "https://www.openstreetmap.org/node/9562270251",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 9562270251,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "桃園市龍潭區公園路68號",
+        "addr:housenumber": "68",
+        "addr:street": "公園路",
+        "amenity": "restaurant",
+        "cuisine": "hotpot",
+        "name": "錢都日式涮涮鍋"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/9562270251",
+          "url": "https://www.openstreetmap.org/node/9562270251",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1095.312410889732
+    },
+    {
+      "latitude": 24.8682437,
+      "longitude": 121.2177126,
+      "id": "osm:node/8385313328",
+      "name": "八方雲集",
+      "originalName": "八方雲集",
+      "aliases": [
+        "八方雲集",
+        "Bafang Dumpling",
+        "八方雲集"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "小吃",
+      "address": "桃園市北龍路289",
+      "sourceUrl": "https://www.openstreetmap.org/node/8385313328",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 8385313328,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區北龍路289號",
+        "addr:housenumber": "289",
+        "addr:street": "北龍路",
+        "amenity": "fast_food",
+        "branch": "龍潭北龍店",
+        "brand": "八方雲集",
+        "brand:en": "Bafang Dumpling",
+        "brand:wikidata": "Q28417381",
+        "brand:wikipedia": "zh:八方雲集",
+        "brand:zh": "八方雲集",
+        "cuisine": "dumplings",
+        "name": "八方雲集",
+        "name:en": "Bafang Dumpling",
+        "name:zh": "八方雲集",
+        "phone": "+886 3 409 0700",
+        "takeaway": "yes",
+        "website": "https://www.8way.com.tw/"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": "https://www.8way.com.tw/",
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/8385313328",
+          "url": "https://www.openstreetmap.org/node/8385313328",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1110.0360864925453
+    },
+    {
+      "latitude": 24.8698575,
+      "longitude": 121.2045344,
+      "id": "osm:node/4513231293",
+      "name": "原鮮居酒屋",
+      "originalName": "原鮮居酒屋",
+      "aliases": [
+        "原鮮居酒屋"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "桃園市聖亭路245",
+      "sourceUrl": "https://www.openstreetmap.org/node/4513231293",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4513231293,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區聖亭路245號",
+        "addr:housenumber": "245",
+        "addr:postcode": "325",
+        "addr:street": "聖亭路",
+        "amenity": "restaurant",
+        "name": "原鮮居酒屋",
+        "opening_hours": "Mo-Su 11:00-17:00",
+        "phone": "+886 3 480 6609"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Su 11:00-17:00",
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4513231293",
+          "url": "https://www.openstreetmap.org/node/4513231293",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1120.5265937806794
+    },
+    {
+      "latitude": 24.8681678,
+      "longitude": 121.2181119,
+      "id": "osm:node/4515533289",
+      "name": "星巴克",
+      "originalName": "星巴克",
+      "aliases": [
+        "星巴克",
+        "Starbucks",
+        "星巴克"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "咖啡廳",
+      "address": "桃園市北龍路292-1",
+      "sourceUrl": "https://www.openstreetmap.org/node/4515533289",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4515533289,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區北龍路292-1號",
+        "addr:housenumber": "292-1",
+        "addr:postcode": "325",
+        "addr:street": "北龍路",
+        "amenity": "cafe",
+        "brand": "星巴克",
+        "brand:en": "Starbucks",
+        "brand:wikidata": "Q37158",
+        "brand:wikipedia": "zh:星巴克",
+        "brand:zh": "星巴克",
+        "cuisine": "coffee_shop",
+        "name": "星巴克",
+        "name:en": "Starbucks",
+        "name:zh": "星巴克",
+        "opening_hours": "Mo-Su 07:00-22:00",
+        "operator": "悠旅生活事業股份有限公司",
+        "phone": "+886 3 470 8676",
+        "takeaway": "yes",
+        "website": "http://Starbucks.com.tw"
+      },
+      "mealTags": [
+        "下午茶"
+      ],
+      "featureTags": [],
+      "openingHours": "Mo-Su 07:00-22:00",
+      "website": "http://starbucks.com.tw/",
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4515533289",
+          "url": "https://www.openstreetmap.org/node/4515533289",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1132.6647590592595
+    },
+    {
+      "latitude": 24.8546633,
+      "longitude": 121.2189578,
+      "id": "osm:way/418882422",
+      "name": "七彩雲南",
+      "originalName": "七彩雲南",
+      "aliases": [
+        "七彩雲南"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "餐廳",
+      "address": "未取得公開地址",
+      "sourceUrl": "https://www.openstreetmap.org/way/418882422",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "way",
+      "osmId": 418882422,
+      "osmTags": {
+        "amenity": "restaurant",
+        "capacity": "200",
+        "cuisine": "thai",
+        "delivery": "no",
+        "name": "七彩雲南",
+        "smoking": "no",
+        "takeaway": "yes"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐"
+      ],
+      "featureTags": [],
+      "openingHours": null,
+      "website": null,
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "way/418882422",
+          "url": "https://www.openstreetmap.org/way/418882422",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1150.6058667540967
+    },
+    {
+      "latitude": 24.8684294,
+      "longitude": 121.2181413,
+      "id": "osm:node/4515516190",
+      "name": "麥當勞",
+      "originalName": "麥當勞",
+      "aliases": [
+        "麥當勞",
+        "McDonald's",
+        "麥當勞",
+        "麥當勞"
+      ],
+      "entityId": null,
+      "mode": "food",
+      "category": "小吃",
+      "address": "桃園市北龍路301",
+      "sourceUrl": "https://www.openstreetmap.org/node/4515516190",
+      "retrievedAt": "2026-10-12T10:10:23.372Z",
+      "osmType": "node",
+      "osmId": 4515516190,
+      "osmTags": {
+        "addr:city": "桃園市",
+        "addr:country": "TW",
+        "addr:district": "龍潭區",
+        "addr:full": "325桃園市龍潭區北龍路301號",
+        "addr:housenumber": "301",
+        "addr:postcode": "325",
+        "addr:street": "北龍路",
+        "amenity": "fast_food",
+        "brand": "麥當勞",
+        "brand:en": "McDonald's",
+        "brand:wikidata": "Q38076",
+        "brand:wikipedia": "zh:麦当劳",
+        "brand:zh": "麥當勞",
+        "brand:zh-Hant": "麥當勞",
+        "cuisine": "burger",
+        "name": "麥當勞",
+        "name:en": "McDonald's",
+        "name:zh": "麥當勞",
+        "name:zh-Hant": "麥當勞",
+        "opening_hours": "24/7",
+        "phone": "+886 3 480 1401",
+        "takeaway": "yes",
+        "website": "http://McDonalds.com.tw"
+      },
+      "mealTags": [
+        "午餐",
+        "晚餐",
+        "宵夜"
+      ],
+      "featureTags": [],
+      "openingHours": "24/7",
+      "website": "http://mcdonalds.com.tw/",
+      "evidence": [
+        {
+          "provider": "Overpass",
+          "sourceId": "node/4515516190",
+          "url": "https://www.openstreetmap.org/node/4515516190",
+          "retrievedAt": "2026-10-12T10:10:23.372Z",
+          "kind": "osm-tags",
+          "description": "獨立 POI 查詢取得的原始 OSM 類別標籤"
+        }
+      ],
+      "rating": null,
+      "reviewCount": null,
+      "popularityScore": null,
+      "localGemScore": null,
+      "ratingEvidence": [],
+      "socialEvidence": [],
+      "distance": 1155.1395200532588
+    }
+  ],
+  "warnings": [],
+  "diagnostics": {
+    "originalInput": "龍潭大池",
+    "mode": "food",
+    "providers": [
+      {
+        "provider": "Overpass OSM",
+        "role": "geographic",
+        "status": "success",
+        "round": 1,
+        "radiusMeters": 1200,
+        "rawCount": 54,
+        "validCount": 52,
+        "invalidCount": 2,
+        "categoryExcluded": 0,
+        "durationMs": 17553,
+        "requests": 1,
+        "cached": false,
+        "error": null,
+        "endpoint": "https://overpass-api.de/api/interpreter",
+        "query": "[out:json][timeout:8][maxsize:8388608];(nwr[\"amenity\"~\"^(restaurant|cafe|fast_food|food_court|ice_cream|bar|pub)$\"](around:1200,24.8610993,121.2100279);nwr[\"shop\"~\"^(bakery|pastry|confectionery|ice_cream)$\"](around:1200,24.8610993,121.2100279););out center;",
+        "retrievedAt": "2026-10-12T10:10:23.372Z"
+      },
+      {
+        "provider": "Wikipedia 公開文章",
+        "role": "public-web",
+        "status": "success",
+        "round": 1,
+        "radiusMeters": 1200,
+        "rawCount": 2,
+        "validCount": 0,
+        "invalidCount": 0,
+        "categoryExcluded": 2,
+        "durationMs": 398,
+        "requests": 0,
+        "cached": true,
+        "error": null,
+        "endpoint": "https://en.wikipedia.org",
+        "query": "附近文章 → 實際文章內容、座標、分類驗證",
+        "retrievedAt": "2026-10-12T09:11:53.545Z"
+      },
+      {
+        "provider": "Wikivoyage 公開旅遊文章",
+        "role": "public-web",
+        "status": "success",
+        "round": 1,
+        "radiusMeters": 1200,
+        "rawCount": 55,
+        "validCount": 0,
+        "invalidCount": 12,
+        "categoryExcluded": 43,
+        "durationMs": 324,
+        "requests": 0,
+        "cached": true,
+        "error": null,
+        "endpoint": "https://en.wikivoyage.org",
+        "query": "附近旅遊文章 → 餐飲／景點分節 → 具名列表與獨立座標",
+        "retrievedAt": "2026-10-12T09:11:54.094Z"
+      },
+      {
+        "provider": "觀光署公開餐飲資料",
+        "role": "public-web",
+        "status": "skipped",
+        "round": 1,
+        "radiusMeters": 1200,
+        "rawCount": 0,
+        "validCount": 0,
+        "invalidCount": 0,
+        "categoryExcluded": 0,
+        "durationMs": 0,
+        "requests": 0,
+        "cached": false,
+        "error": "最近回傳安全性封鎖；暫停請求，未繞過",
+        "endpoint": "https://media.taiwan.net.tw/XMLReleaseAll_public/v2.0/Zh_tw/Restaurant-json.zip",
+        "query": "官方餐飲目錄 → 有名稱與座標 → 本輪範圍驗證",
+        "retrievedAt": null
+      },
+      {
+        "provider": "觀光署公開景點資料",
+        "role": "public-web",
+        "status": "skipped",
+        "round": 1,
+        "radiusMeters": 1200,
+        "rawCount": 0,
+        "validCount": 0,
+        "invalidCount": 0,
+        "categoryExcluded": 0,
+        "durationMs": 0,
+        "requests": 0,
+        "cached": false,
+        "error": "此來源只涵蓋台灣景點；未發送請求",
+        "endpoint": "https://media.taiwan.net.tw/XMLReleaseAll_public/v2.0/Zh_tw/Attraction-json.zip",
+        "query": "官方景點目錄 → 具名景點與座標 → 範圍及地理項目排除",
+        "retrievedAt": null
+      }
+    ],
+    "rounds": 1,
+    "roundResults": [
+      {
+        "round": 1,
+        "radiusMeters": 1200,
+        "rawCandidates": 111,
+        "validPool": 52
+      }
+    ],
+    "candidates": 111,
+    "categoryExcluded": 45,
+    "invalidExcluded": 14,
+    "geographyExcluded": 0,
+    "duplicateExcluded": 0,
+    "finalCount": 50,
+    "validPool": 52,
+    "durationMs": 17570,
+    "radiusMeters": 1200,
+    "requestCount": 1,
+    "requestBudget": 18,
+    "stopReason": "已取得至少50個符合條件且去重的有效候選",
+    "incompleteReasons": [
+      "觀光署公開餐飲資料 第1輪：最近回傳安全性封鎖；暫停請求，未繞過"
+    ]
+  }
+}

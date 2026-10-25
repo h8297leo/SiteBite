@@ -1,0 +1,25 @@
+node_modules/
+dist/
+.env*
+!.env.example
+.cache/
+test-results/
+playwright-report/
+*.log
+
+# Local secrets and credentials
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+service-account*.json
+
+# Local archives, generated evidence and exploratory probes
+*.zip
+/SOURCE-MANIFEST.json
+/docs/*.json
+/docs/*.png
+/scripts/probe*
+.DS_Store
+Thumbs.db

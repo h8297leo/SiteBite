@@ -1,0 +1,18 @@
+import { SearchResponse, modeLabels } from '../../shared/model';
+const labels={success:'成功',partial:'部分完成',failed:'失敗',skipped:'未執行／重用本次候選'};
+export function SearchDiagnostics({data}:{data:SearchResponse}){
+ const d=data.diagnostics;
+ return <details className="mt-6 rounded-xl border border-slate-800 p-4 text-xs text-slate-400" data-testid="diagnostics"><summary className="cursor-pointer text-sm text-emerald-300">搜尋診斷 · {modeLabels[data.mode]} · {d.rounds} 輪</summary><div className="mt-4 space-y-3">
+  <p>原始輸入：{d.originalInput} · 解析中心：{data.anchor.displayName}</p><p>座標：{data.anchor.latitude}, {data.anchor.longitude} · 地理類型：{data.anchor.geoType} · 可信度：{data.anchor.confidence==='source-match'?'公開來源匹配':'使用者提供座標'}</p>
+  <p>條件：{data.filters.category}／{data.filters.meal??'不限時段'}／{data.filters.feature??'不限特色'}／{data.filters.maxDistance===null?'不限使用者距離':`${data.filters.maxDistance/1000} km`}</p>
+  <div className="overflow-x-auto"><table className="w-full min-w-[600px] text-left"><thead><tr>{['輪次／範圍','Provider','狀態','候選／有效','排除類別／無效','HTTP／快取'].map(h=><th key={h} className="border-b border-slate-700 p-2">{h}</th>)}</tr></thead><tbody>{d.providers.map((p,i)=><tr key={i}><td className="p-2">{p.round} · {p.radiusMeters/1000} km</td><td className="p-2">{p.provider}</td><td className={`p-2 ${p.status==='failed'?'text-amber-300':'text-slate-300'}`}>{labels[p.status]}{p.error&&<p className="mt-1 max-w-xs text-[11px] text-slate-500">{p.error}</p>}</td><td className="p-2">{p.rawCount}／{p.validCount}</td><td className="p-2">{p.categoryExcluded}／{p.invalidCount}</td><td className="p-2">{p.requests}／{p.cached?'是':'否'}</td></tr>)}</tbody></table></div>
+  <p>各輪有效候選池：{d.roundResults.map(r=>`第${r.round}輪 ${r.radiusMeters/1000}km：原始${r.rawCandidates}／池${r.validPool}`).join(' → ')}</p>
+  {d.webDiscovery&&<section className="rounded-lg border border-emerald-900 p-3" data-testid="web-discovery"><p className="text-emerald-300">Phase 2 公開網頁發現（不含 P1.5 附近文章來源）</p><p className="mt-2">找到網頁／實體記錄 {d.webDiscovery.pages} → 解析 {d.webDiscovery.parsedPages} → 提取候選 {d.webDiscovery.extracted} → 地理及類別驗證 {d.webDiscovery.verified}</p><p className="mt-2">與 OSM 合併 {d.webDiscovery.osmDuplicates} · 候選池新增獨立地點 {d.webDiscovery.addedToPool} · 最終列表新增 {d.webDiscovery.addedToFinal} · 原有地點新增來源證據 {d.webDiscovery.additionalEvidence}</p><p className="mt-2 text-slate-500">網頁、實體及候選數為各輪實際處理次數；新增地點與證據經去重。50 筆上限可能讓候選池新增地點未進入最終列表。</p></section>}
+  <p>原始候選處理次數 {d.candidates} · 類別排除 {d.categoryExcluded} · 格式／名稱排除 {d.invalidExcluded} · 地理範圍排除 {d.geographyExcluded} · 重複合併 {d.duplicateExcluded}</p>
+  <p>去重後有效池 {d.validPool} · 本模式最終 {d.finalCount} · 耗時 {(d.durationMs/1000).toFixed(1)} 秒 · HTTP 請求 {d.requestCount}/{d.requestBudget}</p><p>停止原因：{d.stopReason}</p>
+  {d.incompleteReasons.length>0&&<div className="text-amber-300">未完成原因：{d.incompleteReasons.map((r,i)=><p key={i}>{r}</p>)}</div>}
+  {d.providers.map((p,i)=><details key={i}><summary className="cursor-pointer">{p.provider} 第{p.round}輪 · 查詢與端點</summary><p className="mt-2 break-all">{p.endpoint}</p><pre className="mt-2 whitespace-pre-wrap break-all">{p.query}</pre>{p.sourceType&&<><p className="mt-2">來源類型：{p.sourceType} · 網頁／記錄 {p.webPages??0} · 解析 {p.parsedPages??0} · 提取 {p.extractedCandidates??0} · 驗證 {p.verifiedPlaces??0}</p>{Boolean(p.queries?.length)&&<div className="mt-2">實際查詢：{p.queries!.map((q,j)=><p className="break-all" key={j}>{q}</p>)}</div>}{Boolean(p.exclusions?.length)&&<div className="mt-2 text-amber-300">排除原因：{p.exclusions!.map((q,j)=><p key={j}>{q}</p>)}</div>}</>}</details>)}
+  <p>評分、評論與社群分析：本階段未執行。Provider 成功代表已取得並解析資料，不代表每個地點值得推薦。</p>
+ </div></details>;
+}
+

@@ -1,0 +1,26 @@
+{
+  "nextPhaseRequires": "使用者明確驗收 Phase 2",
+  "timezone": "Asia/Taipei",
+  "scope": "public-web-discovery-only",
+  "limits": [
+    "General SearXNG not configured",
+    "Regional article adapter not configured",
+    "Taiwan official websites reject automated access",
+    "Public providers may fail or rate-limit"
+  ],
+  "directory": "sitebite-web",
+  "version": "0.3.0-public-web",
+  "validation": {
+    "build": "passed",
+    "apiKeysUsed": false,
+    "vitest": "34 passed",
+    "playwright": "8 passed in fixed full nine-case suite; corrected isolated tile-failure test passed; nine distinct cases verified",
+    "actualDataCases": 16,
+    "actualTargetedRetries": 2
+  },
+  "previousSnapshotSha256": "BDDEF62D98E3299FC70A4A27FD1BC747B36496C5F8B7CBA8475BCFC6A5F32DD6",
+  "phase": 2,
+  "status": "awaiting-user-acceptance",
+  "previousSnapshot": "../versions/sitebite-web-0.2.0-before-phase2.zip",
+  "date": "2026-10-12"
+}
