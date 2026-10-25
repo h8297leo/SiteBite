@@ -2,6 +2,29 @@
 
 版本 `0.3.0-public-web`。在 P1.5 擴充，保留雙搜尋引擎、雷達、地圖、GPS、導航、篩選、取消及過期回應保護。
 
+## Render 正式環境
+
+使用 **Node Web Service**，Repository `h8297leo/SiteBite`、Branch `main`、Root Directory 留空（Repository 根目錄就是應用程式）。
+
+| 設定 | 值 |
+| --- | --- |
+| Build Command | `npm ci --include=dev && npm run build` |
+| Start Command | `npm run start` |
+| Health Check Path | `/api/health` |
+| Environment | `NODE_ENV=production` |
+| Node.js | `package.json` 限定 `>=22.12.0 <25`，建議24.x；本機測試24.22.0 |
+| PORT | 由Render提供，不必手動設定 |
+
+Build 明確包含 TypeScript、Vite 等開發依賴；執行期 `tsx` 位於正式依賴。保留 `--production` 模式，由 Express 在 `0.0.0.0:$PORT` 提供 `dist/` 與 `/api/*`，前後端使用同一個網域。開發模式維持 `127.0.0.1`；兩種模式的預設PORT均為3000。
+
+Render終止外部HTTPS，再將請求轉送至Express HTTP埠，無須在應用程式新增憑證或另建前端服務。這是部署相容性修正，尚未建立或驗證實際Render公開網址；建立服務後，請檢查首頁與 `/api/health`，並操作搜尋。
+
+部署測試：`npm run test:deployment` 驗證正式啟動、首頁／JS、健康JSON與API驗證；`npm run test:deployment -- --dev` 驗證本機模式；`npm run test:deployment -- --live` 會額外向公開來源實際解析台北101並搜尋美食／景點。測試使用13001／13002埠，結束時只停止自己建立的程序。外部來源可能逾時或限流，不將0筆結果當成找到地點。
+
+正式與開發依賴皆可透過 `npm ci --include=dev` 安裝；若只要執行已建置版本，可使用 `npm ci --omit=dev` 再 `npm run start`。本機驗收結果見 [Render部署修正紀錄](docs/RENDER-COMPATIBILITY.md)。
+
+平台設定依據：[Render Web Services](https://render.com/docs/web-services)、[Health Checks](https://render.com/docs/health-checks)、[Node.js版本](https://render.com/docs/node-version)。
+
 ## 啟動
 
 在本目錄執行 `npm install`、`npm run dev`（亦支援 pnpm）。單一程序啟動 Express 後端及 Vite 前端，網址 **http://localhost:3000/**，只供本機使用，不是公開部署。此電腦亦可使用 `./start-local.ps1`。核心搜尋不需要 API Key。

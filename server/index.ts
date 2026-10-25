@@ -2,7 +2,6 @@ import 'dotenv/config';
 import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createServer } from 'vite';
 import { z } from 'zod';
 import { Anchor, SearchIntentSchema, ResponseSchema } from '../shared/model';
 import { resolveLocation, coordinateAnchor } from './locationResolver';
@@ -27,7 +26,9 @@ app.post('/api/search',async(req,res)=>{try {
 app.use('/api',(_req,res)=>res.status(404).json({error:'找不到此 API'}));
 app.use((error:unknown,_req:express.Request,res:express.Response,_next:express.NextFunction)=>res.status(400).json({error:'請求格式無效'}));
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-if(process.argv.includes('--production')){app.use(express.static(path.join(root,'dist')));app.get('*',(_req,res)=>res.sendFile(path.join(root,'dist/index.html')));}
-else {const vite=await createServer({root,server:{middlewareMode:true},appType:'spa'});app.use(vite.middlewares);}
-const port=Number(process.env.PORT??3000);app.listen(port,'127.0.0.1',()=>console.log(`SiteBite Phase 2 ready: http://localhost:${port} (frontend + backend; no API key)`));
+const production=process.argv.includes('--production');
+if(production){app.use(express.static(path.join(root,'dist')));app.get('*',(_req,res)=>res.sendFile(path.join(root,'dist/index.html')));}
+else {const {createServer}=await import('vite');const vite=await createServer({root,server:{middlewareMode:true},appType:'spa'});app.use(vite.middlewares);}
+const port=Number(process.env.PORT??3000),host=production?'0.0.0.0':'127.0.0.1';
+app.listen(port,host,()=>console.log(`SiteBite Phase 2 ready: http://${host}:${port} (frontend + backend; no API key)`));
 
